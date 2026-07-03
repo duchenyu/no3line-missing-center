@@ -4,3 +4,4 @@
 *.zip
 __pycache__/
 .DS_Store
+viz_output/

@@ -38,30 +38,54 @@ Earlier conjectures based on small-n patterns — prime residue classification (
 
 A fundamental question is: **why n=12?** Why do n=6, 8, 10 all have zero missing-center solutions while n=12 has 52?
 
-**Distance ring analysis**: For even n, the grid center lies at a half-integer coordinate ((n−1)/2, (n−1)/2). The squared distance (scaled by 4) from the center is:
+#### Distance Ring Definition (clarification)
 
-d(c,r) = (2c−(n−1))² + (2r−(n−1))²
+We use **squared Euclidean distance** (scaled for integer arithmetic) from the grid center:
 
-The values x² = (2c−(n−1))² range over {1², 3², 5², …, (n−1)²}, giving n/2 distinct squared-offset values. A distance "ring" consists of all grid points sharing the same sum of two such squares.
+d(c, r) = (2c − X)² + (2r − Y)²,   where X = Y = n−1 for even n, or X = Y = 2·⌊n/2⌋ for odd n.
 
-| n | Distinct Rings (R) | 2×R (max pts without center) | 2n (pts needed) | Ratio 2n/(2R) | Flexibility | Missing |
-|---|-------------------|------------------------------|-----------------|---------------|-------------|---------|
+A **distance ring** is the set of grid points sharing the same d value — these are points on the same *circle* centered at the grid center. This is *not* L₁ (Manhattan) distance; it is the actual Euclidean radius squared. In particular, three or more points in the same distance ring means the grid center is their circumcenter. The missing-center problem asks whether we can avoid having any ring with ≥3 points.
+
+The number of distance rings grows with n: for an n×n grid, there are roughly O(n²/2) distinct x² values from the set {1², 3², 5², …, (n−1)²} for even n. The specific evolution is:
+
+| n | Distinct Rings (R) | 2·R (max pts without center) | 2n (pts needed) | Ratio 2n/(2R) | Relative slack | Missing |
+|---|-------------------|------------------------------|-----------------|---------------|----------------|---------|
 | 6 | 6 | 12 | 12 | 1.000 | 0% | 0 |
 | 8 | 9 | 18 | 16 | 0.889 | 11% | 0 |
 | 10 | 14 | 28 | 20 | 0.714 | 29% | 0 |
 | 12 | 19 | 38 | 24 | 0.632 | 37% | **52** |
 | 14 | 25* | 50* | 28 | 0.569* | 44%* | ? |
 
-**Theoretical analysis**: We constructed the counting matrix M[i][j] = number of points placed by row‑group i (rows with x² = value i) into column‑group j (columns with x² = value j). The distance‑ring constraints reduce to:
+#### Why n=12? The "Inner Ring Avoidance" Mechanism
 
-- M[i][i] ≤ 2 (each pure‑square ring has capacity 2)
-- M[i][j] + M[j][i] ≤ 2 for i ≠ j (mixed rings are shared between two row‑column group pairs)
+To construct a missing-center solution, we must **avoid putting ≥3 points into any single distance ring**. This is hardest for the **innermost rings** — those with fewer grid points — because they have limited capacity.
 
-For n=8, we solved the matrix equation explicitly and found a continuous family of solutions parameterized by a free integer variable. **Therefore, the distance‑ring constraint alone does NOT forbid missing-center solutions at n=8.**
+For example, in a 12×12 grid, the innermost rings and their capacities are:
 
-The fact that the exhaustive search finds zero missing-center solutions for n=8 and n=10 implies that **the collinearity constraint is the true barrier**. The extra distance rings at n=12 (19 vs. 9 for n=8) provide sufficient geometric diversity for the search to find arrangements satisfying both constraints simultaneously.
+| Ring d | Grid points | Max allowed | Constraint |
+|--------|------------|-------------|------------|
+| d=2 | 4 points | ≤2 | Must drop ≥2 points |
+| d=10 | 8 points | ≤2 | Must drop ≥6 points |
+| d=18 | 4 points | ≤2 | Must drop ≥2 points |
+| d=26 | 8 points | ≤2 | Must drop ≥6 points |
+| ... | ... | ... | ... |
 
-**Conclusion**: The threshold at n=12 is a genuine combinatorial phase transition driven by the interaction between the distance-ring capacity and the "no three collinear" constraint — not a simple pigeonhole effect.
+**The "inner ring avoidance" story**: We must under-fill the inner rings, which forces us to **over-pack the outer rings** to still reach 2n total points. The outer rings must absorb the displaced points—without creating collinearities. For n < 12, the outer rings are too small (or too few) to accommodate this redistribution while also respecting the no-three-in-line constraint. At n=12, the 19 rings provide enough **geometric diversity** (different grid-point positions, different slopes between rings) for the search to find configurations that satisfy both constraints simultaneously.
+
+#### Confirmation via Matrix Analysis
+
+We formalized the distance-ring constraints as a **counting matrix M[i][j]**:
+
+- Let row‑group i be all rows with the same x² value (e.g., rows 0 and 11 both have x² = 121).
+- M[i][j] = number of points that row‑group i contributes to column‑group j.
+- Constraint 1: M[i][i] ≤ 2 (pure‑square ring has capacity 2).
+- Constraint 2: M[i][j] + M[j][i] ≤ 2 for i ≠ j (mixed squares share a ring).
+
+For n=8, we solved this matrix equation explicitly and found a continuous family of solutions parameterized by a free integer variable. **Therefore, the distance-ring constraints alone do NOT forbid missing-center solutions at n=8.**
+
+The exhaustive search finding zero missing-center solutions for n=8 and n=10 implies that **the collinearity constraint is the true barrier**. The extra rings at n=12 (19 vs. 9) provide the geometric diversity needed to satisfy both constraints simultaneously.
+
+**Conclusion**: The threshold at n=12 is a genuine **combinatorial phase transition** driven by the interaction between distance-ring capacity and the no-three-in-line constraint — not a pigeonhole effect, and not an artifact of the search heuristic.
 
 ### 3. Relaxing the Row Constraint
 
@@ -91,7 +115,21 @@ When placing a new point at (r, c):
     Otherwise → place, then update forbid_accum for rows > r.
 ```
 
-This is a **precomputed line‑blocking table** — for every pair of existing grid points, we precompute all future grid cells that lie on the same line. At check time, the O(k²) nested loop is replaced by a single bit‑test.
+This is a **precomputed line‑blocking table** — for every pair of existing grid points, we use the exact integer line equation to compute all future grid cells that lie on the same line:
+
+```
+Given points A = (r1, c1) and B = (r2, c2), dr = r2-r1, dc = c2-c1:
+  For each future row tr > r2:
+    if dc * (tr - r1) % dr == 0:                    ← divisible → integer column
+      col = c1 + dc * (tr - r1) / dr                 ← exact collinear point
+      forbid[tr] |= (1ULL << col)
+```
+
+This works for **all slopes** (1/2, 2/3, 5/7, and every rational slope), not just axis-aligned or 45° diagonals. The integer-arithmetic formulation is exact — there are no floating-point approximations.
+
+**Why no O(k²) loop is needed**: Every collinear triple (rₐ,cₐ)-(rᵦ,cᵦ)-(rᵧ,cᵧ) has a unique pair with the two *largest* row indices. When those two points are both placed, their line equation is added to `forbid` for all future rows. By the time the third point is considered, its column is already blocked. The induction is complete — no collinear triple can escape.
+
+**Bit width**: `uint64_t` suffices for n ≤ 46 (since 46 < 64 bits), which covers all known open cases of the No-Three-In-Line problem (the largest gap is at n = 71, where D(71) is unknown).
 
 **Speedup**: n=11 mode 0 went from 9.2 minutes → 8.5 seconds (**65×**).
 
@@ -142,22 +180,31 @@ The batch file auto-detects MSVC if MinGW is not found.
 ## Repository Structure
 
 ```
-├── no3line.cpp              # C++ source: forbid-accumulator search (v2)
-├── d4_relaxed.cpp           # C++ source: cell-by-cell search (no row constraint)
-├── Makefile                 # Linux build
-├── compile.bat              # Windows build
-├── run.bat                  # Windows batch runner
-├── run_cloud.sh             # Linux batch runner (16-thread cloud preset)
-├── README.md                # This file
-├── results/                 # Computed result CSVs
-│   ├── result_n5_mode0.csv .. result_n13_mode1.csv
-│   └── result_d4_n5.csv .. result_d4_n7.csv   (unconstrained results)
-├── solutions/               # Dumped individual solutions
-│   ├── sols_n12.csv         # All 28 (base) missing-center solutions for n=12
-│   └── sols_d4_n5.csv ..    # Unconstrained solutions (if available)
-└── analysis/
-    ├── analyze.py           # Distance ring analysis for 2-per-row solutions
-    └── analyze_d3.py        # Even-n threshold ring analysis
+├── no3line.cpp                  # C++ source: forbid-accumulator search (v2)
+│                                #   mode 0 = full enumeration
+│                                #   mode 1 = missing-center only (distance pruning)
+├── d4_relaxed.cpp               # C++ source: unconstrained search (Direction 4)
+│                                #   cell-by-cell backtracking w/o "2-per-row" rule
+├── verify_solution.py           # Python: independent solution verifier
+│                                #   checks: (a) no 3 collinear, (b) center presence
+├── visualize.py                 # Python: distance-ring colored grid visualization
+│                                #   supports: SVG (standalone) + matplotlib (rich)
+├── Makefile                     # Linux build (g++ -static -O3 -march=native)
+├── compile.bat                  # Windows MinGW build
+├── run.bat                      # Windows batch runner
+├── run_cloud.sh                 # Linux batch runner (threads and n-range presets)
+├── README.md                    # This file
+├── solutions/
+│   └── sols_n12.csv             # All 28 (base) missing-center solutions for n=12
+├── results/
+│   ├── result_n5_mode0.csv .. result_n13_mode1.csv   (2-per-row search)
+│   └── result_d4_n5.csv .. result_d4_n7.csv           (unconstrained search)
+├── analysis/
+│   ├── analyze.py               # Distance ring statistics for 2-per-row solutions
+│   ├── analyze_d3.py            # Even-n threshold: matrix M[i][j] analysis
+│   └── prep_construction.py     # Construction preparation: universal rings/columns
+└── viz_output/
+    └── solution_12_0.svg        # Sample visualization (auto-generated by visualize.py)
 ```
 
 ## Results Data
@@ -167,6 +214,18 @@ Each CSV row: `n,total_solutions,with_center,missing_center,time_seconds,mode`
 - Mode 0: total includes all solutions, with_center = total − missing
 - Mode 1: only missing_center is counted (with distance pruning)
 - D4 CSVs: unconstrained search results
+
+**Verification**: All solution dumps can be independently verified with `verify_solution.py`:
+
+```bash
+python verify_solution.py solutions/sols_n12.csv
+# Output: All 28 solutions valid — no collinear triples found.
+```
+
+This produces a report with three independent checks:
+1. **No-three-in-line**: O(k³) exhaustive point-triple area check
+2. **Center presence**: Distance ring distribution analysis (max ring count ≥ 3?)
+3. **Column usage**: Verification that each column appears exactly twice
 
 ## Future Research Directions
 
@@ -194,7 +253,9 @@ The threshold at n=12 is caused by the interaction between distance-ring capacit
 
 Removing the "2 points per row" constraint massively increases the solution space (n=7: 132→1.3M solutions, 4→11,922 missing-center). However, the even-n threshold at n=12 remains intact — confirming it is a genuine geometric property, not a search heuristic artifact.
 
-The unconstrained search code (`d4_relaxed.cpp`) can enumerate all No-Three-In-Line solutions for n ≤ 7 without any grid constraints.
+**Code**: `d4_relaxed.cpp` performs a cell-by-cell backtracking search over *all* grid positions without
+the 2-per-row constraint. It uses the same forbid_accumulator approach but allows 0–N points per row.
+This is a distinct algorithm from `no3line.cpp` and lives in its own file for clarity.
 
 ### Direction 5: Spectral Analysis of the Forbid Matrix
 

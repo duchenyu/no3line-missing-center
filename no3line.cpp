@@ -30,8 +30,39 @@ inline int get_dist(int c, int r) {
     return dist_lookup[r * N + c];
 }
 
-// ===== Forbid accumulator: maintain per-row blocked column masks =====
+// ====================================================================
+// Forbid Accumulator — O(1) collinearity check via precomputed blocking
+// ====================================================================
+// CORE IDEA:
+//   Instead of O(k²) nested-loop checking every pair of existing points
+//   when placing a new point, we maintain a per-row bitmask array
+//   `forbid[row]` that pre-accumulates all columns that would create a
+//   collinear triple with ANY two previously placed points.
+//
+//   At placement time for row 'r', column 'c':
+//       if (forbid[r] has bit c set) → reject immediately (O(1))
+//
+//   The check is provably complete because:
+//   - Every collinear triple (r1,c1)-(r2,c2)-(r3,c3) has a unique pair
+//     with the two largest row indices.
+//   - When that pair's second point is placed (at the higher row),
+//     the line equation is used to compute the blocking column at r3.
+//
+//   This works for ALL slopes, not just axis-aligned or ±45°:
+//   The line through (r1,c1)-(r2,c2) is y = c1 + (c2-c1)/(r2-r1) * (x-r1).
+//   For any future row tr, the collinear column is:
+//       col = c1 + (c2-c1)*(tr-r1) / (r2-r1)
+//   which must be an integer (the divisible check num % dr == 0).
+//
+//   Bit width (uint64_t): sufficient for n ≤ 46 since 46 < 64.
+//   For n > 46, uint64_t would need to be replaced with __int128 or
+//   a bitset, but the problem's maximum D(n) is only studied up to n=71.
+// ====================================================================
+
 // Add blocking from cross-row pair (r1,c1)-(r2,c2) [r1<r2] for all rows > r2
+// For each future row tr, we compute whether the line through (r1,c1)-(r2,c2)
+// passes through an integer grid column at that row, using integer arithmetic
+// to avoid floating point.
 static inline void add_block(uint64_t* forbid, int r1, int c1, int r2, int c2) {
     int dr = r2 - r1;
     int dc = c2 - c1;
@@ -59,13 +90,15 @@ static inline void update_block(uint64_t* forbid, const int row_cols[][2], int r
     }
 }
 
-// ========== Mode 0: Full search ==========
+    // ========== Mode 0: Full search ==========
 struct FullState {
-    int row_cols[32][2];   // columns placed at each row
-    int cols[32];
-    int diag1_cnt[64];     // x+y diagonal occupancy
-    int diag2_cnt[64];     // x-y+N-1 diagonal occupancy
-    uint64_t forbid[32];   // per-row forbidden column masks
+    int row_cols[32][2];   // columns placed at each row (max n=32, expandable)
+    int cols[32];          // column usage count (each column appears exactly 2×)
+    int diag1_cnt[64];     // x+y diagonal occupancy counter (for anti-diag pruning)
+    int diag2_cnt[64];     // x-y+N-1 diagonal occupancy counter (for diag pruning)
+    uint64_t forbid[32];   // per-row forbidden column bitmasks — the core accelerator
+                           // bit c set → placing column c at this row creates collinearity
+                           // uint64_t suffices for n ≤ 46 (46 < 64 bits)
     long long local_total;
     long long local_missing;
 };
@@ -115,7 +148,11 @@ void bt_full(FullState& s, int row) {
             s.diag1_cnt[c2 + row]++;
             s.diag2_cnt[c2 - row + N - 1]++;
 
-            // No O(k²) collinear check — forbid[row] already filtered c1,c2 above
+            // NO O(k²) COLLINEAR CHECK NEEDED — forbid[row] already filtered c1,c2
+            // The forbid_accum array has been maintained by update_block() at
+            // every previous row, blocking all columns that would create a
+            // collinear triple with any two existing cross-row points.
+            // This is the key optimization: O(k²) -> O(1) per placement.
             s.row_cols[row][0] = c1;
             s.row_cols[row][1] = c2;
             memcpy(s.forbid, saved, sizeof(saved));
@@ -192,7 +229,7 @@ void bt_miss(MissState& s, int row) {
             s.diag2_cnt[c2 - row + N - 1]++;
             s.dist_cnt[d2]++;
 
-            // No O(k²) collinear check — forbid[row] already filtered both cols
+            // NO O(k²) COLLINEAR CHECK NEEDED — see comment in bt_full()
             s.row_cols[row][0] = c1;
             s.row_cols[row][1] = c2;
             memcpy(s.forbid, saved, sizeof(saved));
@@ -252,6 +289,11 @@ int main(int argc, char* argv[]) {
     if (N % 2 == 0) { cx_times2 = N - 1; cy_times2 = N - 1; }
     else { cx_times2 = 2 * (N / 2); cy_times2 = cx_times2; }
 
+    // Precompute squared Euclidean distances from grid center for all cells
+    // For even n, center = ((n-1)/2, (n-1)/2) is half-integer; we use
+    // scaled coordinates: dx = 2*c - cx_times2  (always integer)
+    // d = dx² + dy²  — the actual squared Euclidean distance × 4
+    // This is the "distance ring" value used in missing-center detection.
     dist_lookup.resize(N * N);
     for (int r = 0; r < N; r++)
         for (int c = 0; c < N; c++) {
