@@ -105,7 +105,7 @@ def generate_svg(n, pts, output_path, dist_map=None):
     dot_radius = 4
 
     lines = []
-    lines.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size + 80} {size + 40}" width="100%" height="100%">')
+    lines.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size + 160} {size + 40}" width="100%" height="100%">')
     lines.append(f'  <rect width="100%" height="100%" fill="#ffffff"/>')
     
     # Title
@@ -153,7 +153,7 @@ def generate_svg(n, pts, output_path, dist_map=None):
     
     # Legend for distance rings used by solution
     used_distances = sorted(set(dist_map[p] for p in pts))
-    legend_x = size + 50
+    legend_x = size + 70
     legend_y = margin
     
     lines.append(f'  <text x="{legend_x}" y="{legend_y - 5}" font-family="monospace" font-size="11" fill="#333">Distance Rings</text>')
