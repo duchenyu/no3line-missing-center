@@ -1,0 +1,6 @@
+*.exe
+*.o
+*.obj
+*.zip
+__pycache__/
+.DS_Store
