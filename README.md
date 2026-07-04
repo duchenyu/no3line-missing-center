@@ -364,6 +364,25 @@ d(x,y) = (2x-(n-1))^2 + (2y-(n-1))^2 = (2R(x)_x-(n-1))^2 + (2R(x)_y-(n-1))^2
 
 The threshold at n=12 is caused by the interaction between distance-ring capacity and the collinearity constraint. The matrix M[i][j] analysis shows that the ring constraint alone is satisfiable at n=8, but the collinearity constraint eliminates all such assignments. At n=12, the 19 rings provide enough geometric diversity for both constraints to be satisfied simultaneously.
 
+### Z3 Solver Cross-Validation (analysis/z3_solver.py, analysis/z3_solver_v2.py)
+
+An independent validation using Z3 SMT solver to encode the problem as a constraint satisfaction system:
+
+- **Variables**: x[r][c] ∈ {0,1} for each grid cell
+- **Constraints**: PbEq exactly 2 per row/col, PbLe at most 2 per line, PbLe at most 2 per distance ring
+- **v1 (ternary clauses)**: ~20K clauses for n=16 → works for n≤14
+- **v2 (PbLe optimization)**: 7–8.5× fewer constraints → n=12 in 3.5s, but n=16 still times out at 10min
+
+Results:
+| n | Missing-center | Result | Time |
+|---|--------------|--------|------|
+| 6 | No (known) | UNSAT ✅ | <1s |
+| 12 | Yes (52) | SAT ✅ | 3.5s |
+| 14 | Yes (11 inequiv.) | SAT ✅ | ~10s |
+| 16 | Yes (103 inequiv.) | UNKNOWN | 10min |
+
+The Z3 solver independently confirms our n=12 and n=14 missing-center results using a completely different algorithmic paradigm (SMT vs backtracking). This cross-validation strengthens the reliability of the empirical findings.
+
 ### Relaxing the Row Constraint — Explored
 
 Removing the "2 points per row" constraint massively increases the solution space (n=7: 132→1.3M solutions, 4→11,922 missing-center). However, the even-n threshold at n=12 remains intact — confirming it is a genuine geometric property, not a search heuristic artifact.
