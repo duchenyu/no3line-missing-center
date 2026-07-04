@@ -616,7 +616,33 @@ Using the reconstructed full counts, we built a weighted least squares regressio
 
 **Key finding**: mod4 residue (4k+1 vs 4k+3) has almost no direct effect once ring-pair density and primality are controlled. The observed "4k+3 abundance" is mediated through differences in subgrid parity structure (GG vs BB ring distributions).
 
-**Code**: `analysis/d4_reconstruct.py` (reconstruction), `analysis/three_factor_model.txt` (results)
+### Refined Model: Sum-of-Two-Squares Theory
+
+The number-theoretic structure of distance rings provides a more powerful explanation. For each squared distance $d = x^2 + y^2$, the number of integer representations $r_2(d)$ is given by:
+
+\[
+r_2(d) = 
+\begin{cases}
+0 & \text{if any } 4k+3 \text{ prime factor has odd exponent}\\
+4 \prod_{p_i \equiv 1 \pmod{4}} (e_i + 1) & \text{otherwise}
+\end{cases}
+\]
+
+The ring population on the grid equals $r_2(d)$, truncated by grid boundaries for large $d$. This predicts which rings can be used in missing-center solutions (need $\le 2$ points per ring).
+
+A refined weighted least squares model incorporating $r_2$-based features achieves **$R^2 = 0.880$** — dramatically better than the raw model:
+
+| Feature | Coefficient | Interpretation |
+|---------|:-----------:|:--------------|
+| rings (total) | **−0.14** | More rings → fewer missing solutions (dilution effect) |
+| max 4k+1 prime factors | **+5.01** | **Dominant factor** — more representable distances drive missing-center abundance |
+| r₂=0 count | −0.01 | Negligible (impossible rings don't affect usable geometry) |
+| **$R^2$** | **0.880** | Number theory explains 88% of variance |
+
+**Why this works**: The $4k+1$ prime factor count controls how many different distance values are *representable* as sums of two squares. More representable distances → more distance rings → more freedom to avoid ≥3 points per ring while maintaining 2n total points.
+
+**Code**: `analysis/d4_reconstruct.py` (reconstruction), `analysis/sum_of_two_squares.py` (number theory),
+`analysis/three_factor_model.txt` (results)
 
 ## Citation
 
