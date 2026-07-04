@@ -101,7 +101,16 @@ The complete odd-$n$ spectrum (n=7→45) reveals three distinct evolutionary pha
 
 **Phase 2 — Decline (n=21–29)**: rot2 becomes the dominant class. Missing-center rate asymptotically decays: 7.8%→4.5%→4.8%. Total solution count explodes (2,426 at n=21 → 44,890 at n=29) due to rot2's exponential growth.
 
-**Phase 3 — Extinction (n≥31)**: **rot2 vanishes at n=31** (SAT unsatisfiability threshold). The 600× drop (44,890→72) marks a structural phase transition. Only rct4 solutions survive, and all rct4 solutions have the center as circumcenter (by group-theoretic necessity: D₄ orbits force ≥4 points per distance ring). **Missing-center solutions go permanently extinct for all odd n ≥ 33.**
+**Phase 3 — Extinction (n≥31)**: **rot2 vanishes at n=31** — a sharp SAT unsatisfiability threshold. The transition is driven by collinearity constraint density:
+
+| n | rot2 solutions | Available pairs | Need | $\binom{2n}{3}$ per pair |
+|---|---|---|---|---|
+| 27 | 17,332 | 364 | 27 | 68.1 |
+| 29 | 44,828 | 420 | 29 | 73.5 |
+| **31** | **0** | 480 | 31 | **78.8** |
+| 33 | 0 | 544 | 33 | 84.1 |
+
+The critical threshold lies at ≈74 triples per available pair — a classic SAT phase transition. Only rct4 solutions survive at n≥31, and all rct4 solutions have the center as circumcenter (by group-theoretic necessity: D₄ orbits force ≥4 points per distance ring). **Missing-center solutions go permanently extinct for all odd n ≥ 33.**
 
 | n | 31 | 33 | 35 | 37 | 39 | 41 | 43 | 45 |
 |---|----|----|----|----|----|----|----|-----|
