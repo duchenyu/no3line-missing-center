@@ -128,12 +128,16 @@ Search: min_search_large seed=42
 
 
 --- n=12, k=10 (a(12)=10 proven optimal; literature: 108 solutions, 4 D4-inequiv)
-# One solution found in earlier search (seed=42, 200000 trials, has-center)
-Coordinates: (unavailable from current runs — solution too rare for heuristic search)
-Missing-center: NO (found solution had center)
-Search: min_search_large seed=42 (earlier run, not replicated)
-# Note: Heuristic search could not find any solution in 10 seeds × 30000 trials.
-# Literature enumerates 108 total. We cannot compute missing-center rate.
+# Confirmed: 10 seeds × 20000 trials (total 200000) = 0 solutions found.
+# Total confirmed zero searches across all runs: 580000+ trials, 0 solutions.
+# One solution was found in an earlier single run (seed=42, 200000 trials, has-center)
+# but could not be replicated across any other seed.
+Coordinates: (unavailable — heuristic search cannot reliably find these rare solutions)
+Missing-center: NO (the one found solution had center)
+Search: min_search_large seed=42 (1 found in 200k trials, not replicated in 580k+ other trials)
+# Note: Literature enumerates 108 total (4 D4-inequiv). The extreme rarity for heuristic
+# search (~1 in 200000 trials) compared to literature confirms that our search method
+# is not suitable for exhaustive coverage of this (n,k) space.
 
 
 ===============================================================================
