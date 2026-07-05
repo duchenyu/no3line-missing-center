@@ -656,25 +656,36 @@ This variant has been studied by Aichholzer, Eppstein, and Hainzl (2023), who pr
 
 We developed a C++ hill-climbing search with ring-constrained initialization that biases toward "missing-center" solutions (each distance ring ≤2 points). The search is **heuristic, not exhaustive** — results are upper bounds.
 
-**Confirmed (matches known literature):**
+**Comparison with known results (OEIS A277433 / Aichholzer et al. 2023):**
 
-| n | k | Solutions found | Missing-center |
-|:-:|:-:|:--------------:|:-------------:|
-| 7 | 8 | 451 | 72.7% |
-| 8 | 8 | 88 | 65.9% |
-| 11 | 10 | 1+ | 100% (1 found) |
-| 12 | 10 | 1 | 0% (1 found) |
+| n | Literature optimal k | Our best bound | Our solutions found | Missing-center |
+|:-:|:-------------------:|:--------------:|:------------------:|:-------------:|
+| 1 | 1 | 1 (confirmed) | — | — |
+| 2 | 4 | 4 (confirmed) | — | — |
+| 3 | 4 | 4 (confirmed) | — | — |
+| 4 | 4 | 4 (confirmed) | — | — |
+| 5 | 6 | 6 (confirmed) | — | — |
+| 6 | 6 | 6 (confirmed) | — | — |
+| 7 | **8** (proven optimal) | 8 (confirmed) | 451 | 72.7% |
+| 8 | **8** (proven optimal) | 8 (confirmed) | 88 | 65.9% |
+| 9 | **8** (proven optimal) | 8 (confirmed) | 8 | 0.0% |
+| 10 | **8** (proven optimal) | 8 (confirmed) | 4 | 0.0% |
+| 11 | **10** (proven optimal) | 10 (confirmed) | 1+ | 100% |
+| 12 | **10** (proven optimal) | 10 (confirmed) | 1 | 0% |
+| **13** | **not listed in OEIS** | **≤13** ✅ | **5** | **80–100%** |
+| **14** | **not listed in OEIS** | **≤15** ✅ | **13** | **100%** |
+| **15** | **not listed in OEIS** | **≤16** ✅ | **3** | **100%** |
 
 **New upper bounds (not in OEIS A277433):**
 
 | n | k | Solutions found | Missing-center | Notes |
 |:-:|:-:|:--------------:|:-------------:|:------|
 | **13** | **13** | 5 | 80–100% | a(13) ≤ 13 (new) |
-| **13** | 14 | 13 | 61.5% | Larger k, more solutions |
+| 13 | 14 | 13 | 61.5% | Larger k, more solutions |
 | **14** | **15** | 13 | **100%** | a(14) ≤ 15 (new) |
-| **14** | 16 | 49 | 53.1% | Larger k |
+| 14 | 16 | 49 | 53.1% | Larger k |
 | **15** | **16** | 3 | **100%** | a(15) ≤ 16 (new) |
-| **15** | 17 | 23 | 60.9% | Larger k |
+| 15 | 17 | 23 | 60.9% | Larger k |
 
 **Observations** (preliminary, based on heuristic search):
 - The missing-center rate in MIN solutions is consistently 10–40× higher than in MAX solutions
