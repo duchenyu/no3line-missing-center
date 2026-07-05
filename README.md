@@ -715,14 +715,17 @@ but the individual coordinates are not publicly available, so missing-center rat
 **Observations** (preliminary, based on our heuristic search only — note that for n≤12,
 the literature's exhaustive data is not available to us, so rates are from partial samples):
 - The missing-center rate in MIN solutions is consistently higher than in MAX solutions
-- n=14 k=15 and n=15 k=16 solutions found are all missing-center (small samples: 13 and 3)
 - The same mod-4 ordering (4k+3 > even > 4k+1) observed in the MAX problem appears to hold here as well
+- **However**: the ring-biased search (`min_search_fast.cpp`) gave an inflated view. The unbiased
+  search finds both missing-center and has-center solutions even for the smallest k (e.g.,
+  n=14 k=15: 4 of 5 solutions found have center; n=15 k=16: 2 of 2 found have center).
 
 **Caveat**: These results are from randomized heuristic search, not exhaustive enumeration.
 Upper bounds are reliable (solutions found are verified correct). **However, the number of
 solutions listed is only what we discovered in finite trials — the actual total number
 of solutions for any given (n,k) is likely much larger.** Missing-center rates are
 approximate (small sample sizes for some n). See:
+- `analysis/min_solutions.txt` — **all found solutions with coordinates**, sorted by (n,k), annotated with missing-center status and search method
 - `analysis/min_search_large.cpp` — unbiased random search (results in first table)
 - `analysis/min_search_fast.cpp` — ring-constrained search (missing-center bias)
 - `analysis/seed_search.cpp` — seed-based search from known solutions
