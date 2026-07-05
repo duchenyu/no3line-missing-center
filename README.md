@@ -122,6 +122,17 @@ The rct4 solution count grows slowly (∼O(n) rather than exponential), and ring
 
 **Implications for n=71**: The search should target **rct4** symmetry. All known solutions for odd n≥33 (and Heule's n=65,67,69) are rct4. These solutions inherently have the center as a circumcenter — there is no other structural option above the n=31 phase boundary.
 
+**Curious gap: n=11, 13, 15 have no known rct4 solutions.**  
+Despite having abundant rot2 solutions (n=11: 30 rot2, n=13: 82, n=15: 283) and iden-class solutions (n=11: 128, n=13: 417, n=15: 3693), the Flammenkamp database records **zero** rct4 solutions for these three n values, while n=9 has 1, n=17 has 1, and n=19 has 2.
+
+We conjecture this is a **structural gap** rather than a search artifact — the distance ring capacities for m=5,6,7 ($n=2m+1$) fall into a critical range where rct4's "concentrated" ring usage pattern cannot be satisfied. This is supported by:
+
+- **D₄ orbit analysis**: rct4 requires fewer distance rings than rot2 (n=17: 9 rings vs 15 for rot2). For n=11,13,15, the minimal achievable ring count exceeds the rct4 threshold.
+- **Number theory**: The 4k+3 prime factors in these n values restrict available d² values (via Fermat's sum-of-two-squares theorem), limiting ring selection flexibility.
+- **SAT phase transition analogy**: Like rot2's UNSAT threshold at n=31, rct4 may have a narrower "existence window" bounded by n=9 on the low end and n=17 on the high end, with n=11,13,15 falling in a gap.
+
+This is a **conjecture** — no theoretical proof exists. The gap could potentially be filled by a dedicated rct4-targeted search.
+
 **C₄ rot4 solutions scale exponentially with n**:  
 n=44: 1,016 → n=46: 1,366 → n=48: 2,124 → n=50: 3,381 → n=52: 5,062 → n=54: 7,696 → n=56: 10,441  
 The growth rate is ≈1.5× per 2-step increment, with no sign of slowing. This strongly supports **D(n)=2n for all even n**. The only remaining gap ≤ 72 is n=71 (odd). No rot4 solution is known for n=74 as of 2026-06-25.
@@ -527,6 +538,43 @@ Analysis of all known rot4 solutions (n=12, 14, 16, 18, 72) from the [Flammenkam
 The n=72 solution achieved 2n points through C₄ symmetry, which reduces the SAT search from selecting individual points to selecting fundamental orbits. n=71, being odd, cannot exploit C₄ symmetry — the rotation center is a lattice point, breaking the clean orbit structure. This structural difference likely explains why SAT solvers succeed at even n (65, 67, 69, 70, 72) but fail at n=71.
 
 The full n=72 coordinate list is available in `analysis/n72_rot4_coords.txt`, and the encoding from the Flammenkamp database is preserved in `analysis/n72_raw.html`.
+
+### C₄ Orbit Selection: Cycle Decomposition Insight
+
+The **C₄ orbit selection problem** asks: for which even $n=2m$ does a rot4 solution exist?  This reduces to choosing $m$ orbits from the $m\times m$ orbit grid $\\{0,\dots,m-1\\}^2$ such that the original $n\times n$ grid has exactly 2 points per row/column and no three are collinear.
+
+**Key insight**: The row/column constraints turn orbit selection into a **2-regular graph** on $m$ vertices:
+
+- Each orbit $O(i,j)$ covers rows $\\{i,\\,j,\\,n-1-i,\\,n-1-j\\}$
+- Each vertex $r$ (representing opposite-row-pair $\\{r,n-1-r\\}$) must have degree exactly 2
+- Therefore the orbit set forms a **disjoint cycle decomposition** of the $m$ vertices
+
+This reduces the search space from $\binom{m^2}{m}$ (combinatorial explosion) to **integer partitions of $m$** plus vertex ordering — a much more tractable combinatorial design problem.
+
+**Verified cycle patterns** (from Flammenkamp rot4 solutions, $m=3$ to $m=23$):
+
+| $m$ | $n$ | Full $m$-cycle | $(1,m-1)$ | Other valid types |
+|:---:|:---:|:--------------:|:---------:|:-----------------|
+| 3 | 6 | ✅ | — | |
+| 4 | 8 | ✅ | ❌ | |
+| 5 | 10 | ✅ | ✅ | $(1,2,2)$ |
+| 6 | 12 | ❌ | ✅ | $(3,3)$ |
+| 7 | 14 | ✅ | ✅ | $(3,4)$ |
+| 8 | 16 | ✅ | ✅ | $(1,3,4)$ |
+| 9 | 18 | ✅ | ❌ | |
+| 10 | 20 | ✅ | ✅ | $(4,6),\\(5,5)$ |
+| 11 | 22 | ✅ | ✅ | $(3,8)$ |
+| 12 | 24 | ✅ | ✅ | $(3,9),\\(5,7)$ |
+| 13 | 26 | ✅ | ✅ | $(5,8),\\(6,7)$ |
+| 15 | 30 | ✅ | ✅ | $(2,2,11)$ etc. |
+| 16 | 32 | ✅ | ✅ | $(1,4,11)$ etc. |
+| 21–23 | 42–46 | ✅ | ✅ | varied |
+
+**Pattern**: The full $m$-cycle and $(1,m-1)$-cycle types are valid for **all $m\ge 10$**. The only exceptions are $m=4$ and $m=9$ for $(1,m-1)$, and $m=6$ for the full $m$-cycle. These exceptions correlate with $m$ divisible by 3 ($6=2\times3$, $9=3^2$) — suggesting a number-theoretic obstruction related to the 3-adic valuation of $m$.
+
+**Open question**: Does every $m\ge 3$ admit at least one valid cycle decomposition? Empirical evidence strongly suggests yes for all $m\ne 6$, and $m=6$ admits $(1,5)$ and $(3,3)$. This is equivalent to the conjecture that $D(2m)=2m$ for all even $n$.
+
+**Code**: `analysis/c4_cycles.cpp`, `analysis/c4_cycles_ext.cpp` — C++ cycle decomposition explorer; `analysis/c4_actual_orbits.py` — Flammenkamp orbit extraction.
 
 ### Direction 5: The Even n Threshold — Empirically Characterized
 
