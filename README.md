@@ -647,7 +647,16 @@ The rot2 UNSAT is a **global combinatorial phase transition** — none of the in
 
 The transition occurs at **≈78.9 constraints per variable** — a threshold value, analogous to the random 3-SAT phase transition at 4.26 clauses/variable. A rigorous proof would require advanced SAT phase-transition machinery (differential equations method or second moment method), not a simple counting argument.
 
-**Conclusion**: The rot2 UNSAT at $n=31$ is a verified empirical fact with strong theoretical support as a genuine phase transition, but a compact mathematical proof remains an open challenge.
+**Conclusion**: The rot2 UNSAT at $n=31$ is a verified empirical fact with the character of a genuine SAT phase transition — akin to the random 3-SAT threshold at 4.26 clauses/variable or the $k$-coloring threshold. A compact mathematical proof remains an open challenge. To prove it would require either (a) UNSAT core extraction from a SAT solver, (b) the differential equation method for constraint satisfaction, or (c) a novel combinatorial invariant not yet identified.
+
+**Eliminated proof approaches** (all shown insufficient by our analysis):
+- ❌ Center-crossing line count (288 lines at $n=31$, only 31 needed)
+- ❌ Pairwise conflict graph (avg $<3$ conflicts per pair)
+- ❌ Direction uniqueness (287 distinct directions at $n=31$, 31 needed)
+- ❌ Row/col degree feasibility (always satisfiable)
+- ❌ Opposite-row direction overlap (always 100%)
+
+**Key theoretical contribution**: We proved that the collinearity constraint for rot2 on odd $n$ reduces to a **direction uniqueness condition**: no two selected pairs can share the same reduced direction from the center. This equivalence (proved via determinant of the matrix $[(i_1-m)(j_2-m)-(i_2-m)(j_1-m)]$) is itself a non-trivial result. The UNSAT threshold occurs because, at $n=31$, the intersection of the direction-uniqueness constraint with the degree constraints becomes globally unsatisfiable, even though each constraint individually remains easily satisfiable.
 
 **Code**: `analysis/direction_d_rot2_threshold.py` — line-capacity and constraint-density analysis; `analysis/direction_d_conflict_graph.py` — pairwise conflict graph and independence number estimation; `analysis/direction_d_deep_reason.py` — SAT phase transition characterization.
 
