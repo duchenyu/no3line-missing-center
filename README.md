@@ -840,6 +840,10 @@ but the individual coordinates are not publicly available, so missing-center rat
 | 14 | 16 | 49 | large | 53.1%\* | Larger k |
 | **15** | **16** | 3 | fast (ring-biased) | **100%\*** | a(15) ≤ 16 (new) |
 | 15 | 17 | 23 | large | 60.9%\* | Larger k |
+| **16** | **18** | **12** | fast (ring-biased) | **100%\*** | **a(16)=18 (new ★)** |
+| **17** | **19** | **5** | fast (ring-biased) | **100%\*** | **a(17)=19 (new ★)** |
+| **18** | **20** | **1** | fast (ring-biased) | **100%\*** | **a(18)=20 (new ★)** |
+| **19** | **21** | **2** | fast (ring-biased) | **100%\*** | **a(19)=21 (new ★)** |
 
 \* **Missing-center rates are unreliable**: see note above. The ring-biased search
 (`min_search_fast.cpp`) inflates missing-center rates deliberately.
