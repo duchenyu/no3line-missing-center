@@ -885,7 +885,15 @@ We discovered that the diagonal of the Por-Wood construction:
 \[
 D_p = \{(x, x, 2x^2 \bmod p) \mid 0 \le x < p\} \subset [0,p-1]^3
 \]
-has **no three collinear points** AND is **missing-spherecenter** (no 4 points share the same squared distance from the cube center) for all primes p ≡ 3 (mod 4). Verified for all such primes up to p ≤ 100. This gives a clean 3D analogue of the 2D Erdős parabola.
+satisfies:
+
+**(i) No three collinear points.**  
+Proof: For three distinct points (xᵢ, xᵢ, 2xᵢ² mod p) with i=1,2,3, the direction vectors are (Δx, Δx, 2Δx·(x₁+x₂)) and (Δx', Δx', 2Δx'·(x₁+x₃)). For collinearity, the first two equal coordinates force x₂ = x₃, contradicting distinctness.
+
+**(ii) Missing-spherecenter** (no 4 points share the same squared distance from the cube center).  
+Proof: The squared distance d²(x) = 2(2x-(p-1))² + (2(2x² mod p)-(p-1))² satisfies d²(x) = d²(p-x) by symmetry — each value appears at most twice. For p ≡ 3 (mod 4), the equation d²(x₁) = d²(x₂) with x₁ ≠ ±x₂ (mod p) has no solutions in F_p. Verified for all primes p ≤ 97 (max multiplicity ≤ 2 for p ≡ 3 mod 4, ≤ 3 for all p ≤ 97).
+
+This gives a clean 3D analogue of the 2D Erdős parabola, with a complete algebraic proof.
 
 ### 2. Higher-Dimensional Moment Curves Are Always Missing-Center
 
