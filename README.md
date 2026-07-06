@@ -8,7 +8,7 @@ An optimized exhaustive search for **missing-center** solutions to the No-Three-
 
 ## The Problem
 
-Place **2n points** on an **n×n grid** such that no three are collinear. The No-Three-In-Line problem asks for the maximum number of points D(n) achievable. It is known that D(n) = 2n for all n ≤ 72 (with the sole exception of n = 71). The n=72 solution was found by Marijn Heule (CMU) on 2026-06-25 using a SAT solver.
+Place **2n points** on an **n×n grid** such that no three are collinear. The No-Three-In-Line problem asks for the maximum number of points D(n) achievable. It is known that D(n) = 2n for all n ≤ 72 (with the sole exception of n = 71). The n=72 solution was found by Marijn Heule (CMU) on 2026-06-25 using a SAT solver with C₄ (90° rotational) symmetry — by our C₄ theorem (proved below), this solution necessarily has the grid center as a circumcenter, so it is **not** a missing-center solution.
 
 **Our contribution is not about finding more solutions.** Instead, we ask a new question about the existing ones: for each known 2n-point solution, is the grid center ever a circumcenter of some triple of its points? A **missing-center** solution has **no** triple whose circumcircle is centered at the grid center.
 
@@ -884,6 +884,8 @@ We extended the No-Three-In-Line problem to higher dimensions (3D and beyond), b
 
 **Background**: The 3D problem asks for the maximum number of points in an n×n×n grid with no three collinear. Pór and Wood proved this is Θ(n²) by constructing Vp = {(x, y, x²+y² mod p)} for primes p ≡ 3 (mod 4), and showed the minimum bounding box volume for 3D drawings of Kn is Θ(n^{3/2}).
 
+**Note on number theory**: The condition p ≡ 3 (mod 4) in the Por-Wood construction prevents collinearity on the 3D quadratic surface (it ensures the binary quadratic form v_x²+v_y² has no non-trivial zeros modulo p). This is a separate mechanism from the 2D distance-ring analysis, where p ≡ 1 (mod 4) primes generate more representable distances. The two results operate in different mathematical settings — the former in finite-field collinearity, the latter in integer distance representation — and are not in conflict.
+
 Our higher-dimensional findings:
 
 ### 1. The Diagonal Construction (3D Missing-Spherecenter)
@@ -957,7 +959,7 @@ All higher-dimensional analysis scripts are in the [`analysis/`](analysis/) dire
 
 9. **A. Pór and D. R. Wood**, "No-Three-in-Line-in-3D," *Algorithmica*, vol. 47, 2007, pp. 481–488 (originally in *Proc. GD 2004*, LNCS 3383, pp. 395–402). — Proved the 3D no-three-in-line maximum is Θ(n²) and established the vol(n,d,1) framework. The construction Vp = {(x, y, x²+y² mod p)} for p ≡ 3 (mod 4) is the foundation of our higher-dimensional analysis.
 
-10. **T. Agama** (Theophilus Agama), "On the general no-three-in-line problem," arXiv:2106.15621v9, 2021–2026. — Extended the problem to arbitrary dimensions using the compression method, achieving Ω(n^{d-1}·d^{1/(2d)}) points in a d-dimensional n-grid. Implies vol(n,4,1) = O(n^{4/3}).
+10. **T. Agama** (Theophilus Agama), "On the general no-three-in-line problem," arXiv:2106.15621v9, 2021–2026. — Extended the problem to arbitrary dimensions using the compression method, achieving Ω(n^{d-1}·d^{1/(2d)}) points in a d-dimensional n-grid. Implies vol(n,4,1) = O(n^{4/3}). **Caveat**: this paper has not appeared in a peer-reviewed venue as of 2026.
 
 ## Acknowledgments
 
