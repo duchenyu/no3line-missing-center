@@ -97,9 +97,9 @@ Earlier conjectures based on small-n patterns — prime residue classification (
 | 43 | 63 | 0 | 0.0% | rct4 |
 | 45 | 106 | 0 | 0.0% | rct4 |
 
-### Missing-Center Extinction at n≥33
+### Missing-Center Disappearance in Known Symmetry Classes at n≥33
 
-The complete odd-$n$ spectrum (n=7→45) reveals three distinct evolutionary phases:
+The complete odd-$n$ spectrum (n=7→45) reveals three distinct evolutionary phases **within the set of D₄-inequivalent solutions catalogued in the Flammenkamp database**:
 
 **Phase 1 — Abundance (n=7–19)**: Missing-center rate rises to 9.2% at n=13, driven by the iden symmetry class. The ratio oscillates with parity (4k+1 vs 4k+3) and compositeness.
 
@@ -114,7 +114,7 @@ The complete odd-$n$ spectrum (n=7→45) reveals three distinct evolutionary pha
 | **31** | **0** | 480 | 31 | **78.8** |
 | 33 | 0 | 544 | 33 | 84.1 |
 
-The critical threshold lies at ≈74 triples per available pair — a classic SAT phase transition. Only rct4 solutions survive at n≥31, and all rct4 solutions have the center as circumcenter (by group-theoretic necessity: D₄ orbits force ≥4 points per distance ring). **Missing-center solutions go permanently extinct for all odd n ≥ 33.**
+The critical threshold lies at ≈74 triples per available pair — a classic SAT phase transition. Only rct4 solutions survive at n≥31 in the database, and all known rct4 solutions have the center as circumcenter (by group-theoretic necessity: D₄ orbits force ≥4 points per distance ring). **Missing-center solutions are not found in any known symmetry class for odd n ≥ 33. However, iden-class (non-symmetric) solutions are only tracked up to n=20 in the database, so the possibility of iden-class missing-center solutions at larger n remains open.**
 
 | n | 31 | 33 | 35 | 37 | 39 | 41 | 43 | 45 |
 |---|----|----|----|----|----|----|----|-----|
@@ -124,7 +124,7 @@ The critical threshold lies at ≈74 triples per available pair — a classic SA
 
 The rct4 solution count grows slowly (∼O(n) rather than exponential), and ring populations are always 4 or 8 — exactly like the C₄ theorem but for the D₄ group on odd-$n$ grids.
 
-**Observation for n=71**: All known solutions for odd n≥33 (and Heule's n=65,67,69) are rct4. If D(71)=2n, the solution would likely be rct4 as well — which our C₄ theorem implies would necessarily have the center as a circumcenter. This is consistent with the extinction pattern: missing-center solutions die out before n=33 and never reappear at larger odd n.
+**Observation for n=71**: All known solutions for odd n≥33 (and Heule's n=65,67,69) in the database are rct4. If D(71)=2n, the solution would likely be rct4 as well — which our C₄ theorem implies would necessarily have the center as a circumcenter. This is consistent with the pattern: no missing-center solutions have been found in any known symmetry class beyond n=31. The caveat applies: iden-class solutions beyond n=20 are not tracked in the database.
 
 **Curious gap: n=11, 13, 15 have no known rct4 solutions.**  
 Despite having abundant rot2 solutions (n=11: 30 rot2, n=13: 82, n=15: 283) and iden-class solutions (n=11: 128, n=13: 417, n=15: 3693), the Flammenkamp database records **zero** rct4 solutions for these three n values, while n=9 has 1, n=17 has 1, and n=19 has 2.
@@ -146,7 +146,7 @@ The growth rate is ≈1.5× per 2-step increment, with no sign of slowing. This 
 - **Odd n**: Missing counts grow dramatically: 1 → 1 → 6 → 46 → 354 → 357 → 2,363, with a remarkable "freeze" at n=15→17 (354→357).
 - Missing/Total ratio oscillates with n mod 4, suggesting hidden parity structure.
 
-### 3. Odd n Phase Transition — Why n=11 is the Threshold
+### 2. Odd n Acceleration — Why n=11 is the Acceleration Point
 
 The odd n sequence splits into two regimes:
 
@@ -167,7 +167,8 @@ Ring capacity grows faster than linearly (slack ratio increases with n), so capa
 
 n=7: 45 ring pairs → constraint graph sparse
 n=9: 105 ring pairs → manageable  
-**n=11: 190 ring pairs → constraint graph surpasses solvability threshold**
+**n=11: 190 ring pairs → constraint graph surpasses diversity threshold**  
+This increase in geometric diversity (from 105 to 190 pair interactions) enables missing-center solutions to grow from a handful (8 at n=9) to 36 at n=11 — a 4.5× jump.
 n=19: 1275 ring pairs → extremely dense
 
 The **n=15→17 freeze** (354→357, a 1.0× change) is particularly striking evidence that the missing-center count is not a simple function of n. It reveals an interplay between:
@@ -178,7 +179,7 @@ The **n=15→17 freeze** (354→357, a 1.0× change) is particularly striking ev
 
 This analysis suggests missing-center abundance is controlled by a **multi-dimensional phase space** — grid parity, primality, and collinearity constraint density interact in complex but non-random ways.
 
-### 2. The Even n Threshold is Real — and Caused by Collinearity
+### 3. The Even n Threshold is Real — and Caused by Collinearity
 
 A fundamental question is: **why n=12?** Why do n=6, 8, 10 all have zero missing-center solutions while n=12 has 52?
 
@@ -200,7 +201,9 @@ The number of distance rings grows with n: for an n×n grid, there are roughly O
 | 12 | 19 | 38 | 24 | 0.632 | 37% | **52** |
 | 14 | 25* | 50* | 28 | 0.569* | 44%* | ? |
 
-#### Why n=12? The "Inner Ring Avoidance" Mechanism
+#### Conjecture: The "Inner Ring Avoidance" Mechanism
+
+A plausible explanation for the n=12 threshold is the following (still conjectural):
 
 To construct a missing-center solution, we must **avoid putting ≥3 points into any single distance ring**. This is hardest for the **innermost rings** — those with fewer grid points — because they have limited capacity.
 
@@ -773,7 +776,9 @@ A refined weighted least squares model incorporating $r_2$-based features achiev
 | rings (total) | **−0.14** | More rings → fewer missing solutions (dilution effect) |
 | max 4k+1 prime factors | **+5.01** | **Dominant factor** — more representable distances drive missing-center abundance |
 | r₂=0 count | −0.01 | Negligible (impossible rings don't affect usable geometry) |
-| **$R^2$** | **0.880** | Number theory explains 88% of variance |
+| **$R^2$** | **0.880** | Number theory appears to explain 88% of variance |
+
+**⚠️ Caveat**: This model is fitted on 13 data points (n=7—19) with 3 features, carrying a risk of overfitting. The "max 4k+1 prime factors" feature correlates with n itself, so it may partly proxy for grid size rather than being an independent causal factor. This is an **exploratory model** based on small-n data; its predictive power for larger n is untested. Cross-validation on rot2 data for n=21—29 would be valuable future work.
 
 **Why this works**: The $4k+1$ prime factor count controls how many different distance values are *representable* as sums of two squares. More representable distances → more distance rings → more freedom to avoid ≥3 points per ring while maintaining 2n total points.
 

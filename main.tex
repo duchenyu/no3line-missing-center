@@ -447,24 +447,24 @@ $n$ & Missing-center? & Result & Time \\
 The Z3 solver independently confirms our $n=12$ and $n=14$ missing-center results, providing strong cross-validation across different algorithmic paradigms (SMT vs.\ backtracking).
 
 % ============================================================
-\section{Missing-Center Extinction and Structural Phase Transitions}
+\section{Missing-Center Disappearance in Known Symmetry Classes}
 \label{sec:extinction}
 
 \subsection{Even $n$}
 
 C$_4$-symmetric solutions exist for every even $n\le 72$ (Flammenkamp database), with the count growing exponentially ($\sim1.5\times$ per 2-step). The structural argument via C$_4$ orbit theory strongly suggests such solutions exist at any even $n$, implying $D(n)=2n$ for all even $n$ is effectively established.
 
-\subsection{Missing-Center Extinction for Odd $n\ge 33$}
+\subsection{Missing-Center Disappearance in Database Symmetry Classes for Odd $n\ge 33$}
 
 The situation for odd $n$ is more nuanced. Heule's SAT solver~\cite{heule2026} established $D(65)=D(67)=D(69)=2n$ using rct4 (near-rot4) symmetry. However, $n=71$ remains unsolved --- the only gap $\le 72$.
 
-\subsubsection{Extinction of Missing-Center at $n\ge 33$}
+\subsubsection{Disappearance of Missing-Center in Known Classes at $n\ge 33$}
 
 We extended the analysis to $n=45$ using the Flammenkamp configuration database. A dramatic structural phase transition occurs at $n=31$:
 
 \begin{table}[H]
 \centering
-\caption{Missing-center extinction for odd $n\ge 31$.}
+\caption{Missing-center disappearance in known database symmetry classes for odd $n\ge 31$.}
 \label{tab:extinct}
 \begin{tabular}{crrrcl}
 \toprule
@@ -510,9 +510,9 @@ We have proven that the collinearity constraint for rot2 on odd $n$ admits a cle
 \]
 where $m=(n-1)/2$ and the grid coordinates are $0,\dots,n-1$. Geometrically, this means the two pairs share the same reduced direction from the grid center. The rot2 UNSAT at $n=31$ thus reduces to a direction-uniqueness conflict: at this threshold, the degree constraints (exactly 2 points per row/column) force a set of $n$ pairs whose directions cannot all be distinct. This equivalence is itself a non-trivial result; proving that it becomes unsatisfiable at $n=31$ is a SAT phase transition problem comparable in difficulty to proving the random $k$-SAT threshold.
 
-For $n\ge 33$, only rct4 solutions remain, and \textbf{rct4 solutions invariably have the grid center as a circumcenter}. This is a group-theoretic necessity: D$_4$ orbits on odd-$n$ grids force $\ge 4$ points per distance ring.
+For $n\ge 33$, only rct4 solutions remain in the database, and \textbf{rct4 solutions invariably have the grid center as a circumcenter}. This is a group-theoretic necessity: D$_4$ orbits on odd-$n$ grids force $\ge 4$ points per distance ring.
 
-Thus, missing-center solutions are extinct for all odd $n\ge 33$. The center is always a circumcenter in every maximal $2n$-point solution above this threshold.
+Thus, within the catalogued symmetry classes, missing-center solutions are absent for all odd $n\ge 33$. The center is always a circumcenter in every solution recorded in the Flammenkamp database above this threshold. **Caveat**: iden-class (non-symmetric) solutions are only tracked up to $n=20$ in the database, so the existence of iden-class missing-center solutions at larger odd $n$ remains an open question.
 
 \noindent\textbf{Remark on the rct4 gap.} An interesting anomaly is that $n=11$, $n=13$, and $n=15$ have \emph{no} known rct4 solutions in the Flammenkamp database, while smaller ($n=9$) and larger ($n=17,19$) values do. This is not a theoretical impossibility but a search gap: the distance ring capacities for $m=5,6,7$ ($n=2m+1$) fall into a critical range where rct4's concentrated ring usage pattern cannot be satisfied. The gap could potentially be filled by a dedicated rct4-targeted search.
 
@@ -575,7 +575,9 @@ A refined weighted least squares model incorporating $r_2$-based features achiev
 \text{missing rate} = 1.54 - 0.14\cdot(\text{rings}) - 0.01\cdot(\text{r}_2=0) + 5.01\cdot(\text{max }4k+1\text{ primes})
 \]
 
-The dominant factor is the maximum number of $4k+1$ prime factors across all distance rings (coefficient $+5.01$). This makes sense: $4k+1$ primes generate representable distance values, creating more ring diversity and more opportunities to satisfy the $\le 2$ constraint while maintaining $2n$ total points. The dramatic $R^2$ improvement (from $0.620$ to $0.880$) confirms that number theory -- specifically the sum-of-two-squares structure of distance rings -- is the primary driver of missing-center abundance.
+The dominant factor is the maximum number of $4k+1$ prime factors across all distance rings (coefficient $+5.01$). This makes sense: $4k+1$ primes generate representable distance values, creating more ring diversity and more opportunities to satisfy the $\le 2$ constraint while maintaining $2n$ total points. The dramatic $R^2$ improvement (from $0.620$ to $0.880$) confirms that number theory -- specifically the sum-of-two-squares structure of distance rings -- appears to be the primary driver of missing-center abundance in the small-$n$ regime.
+
+**Caveat**: This model is fitted on 13 data points ($n=7$--$19$) with 3 features, carrying a risk of overfitting. The ``max $4k+1$ prime factors'' feature correlates with $n$ itself, so it may partly proxy for grid size. This is an exploratory model; its predictive power for larger $n$ is untested.
 
 Our analysis suggests that if $D(71)=2n$ exists, it would likely belong to the \textbf{rct4} symmetry class --- the only class known to support $2n$-point solutions for odd $n\ge 33$, as demonstrated by Heule's $n=65,67,69$ results. The rct4 class reduces the search to selecting fundamental-domain orbits (a polynomial reduction in variable count) and is the only viable structural class for large odd-$n$ grids.
 
@@ -591,7 +593,7 @@ We have introduced the missing-center invariant for the No-Three-In-Line problem
 \begin{enumerate}[nosep]
 \item A highly optimized forbid-accumulator algorithm ($O(k^2)\to O(1)$ per placement).
 \item A rigorous proof of the C$_4$ theorem (rot4 symmetry $\implies$ center is circumcenter).
-\item Complete missing-center counts for $n=2\dots13$ (full search) and $n=7\dots45$ ($D_4$-inequivalent), revealing a three-phase evolution: abundance ($n=7$--$19$), decline ($n=21$--$29$), and extinction ($n\ge33$).
+\item Complete missing-center counts for $n=2\dots13$ (full search) and $n=7\dots45$ ($D_4$-inequivalent), revealing a three-phase evolution: abundance ($n=7$--$19$), decline ($n=21$--$29$), and disappearance in known classes ($n\ge33$).
 \item The rot2 structural phase transition at $n=31$ ($44{,}890\to72$, a $600\times$ collapse).
 \item A three-factor model explaining missing-center abundance via parity, primality, and collinearity density.
 \item Evidence that $D(n)=2n$ for all even $n$ and structural context for the open case $n=71$.
