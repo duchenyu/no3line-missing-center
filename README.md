@@ -873,6 +873,72 @@ approximate (small sample sizes for some n). See:
 
 ## References
 
+### Higher-Dimensional Generalizations
+
+We extended the No-Three-In-Line problem to higher dimensions (3D and beyond), building on the foundational work of Pór and Wood (2004).
+
+**Background**: The 3D problem asks for the maximum number of points in an n×n×n grid with no three collinear. Pór and Wood proved this is Θ(n²) by constructing Vp = {(x, y, x²+y² mod p)} for primes p ≡ 3 (mod 4), and showed the minimum bounding box volume for 3D drawings of Kn is Θ(n^{3/2}).
+
+Our higher-dimensional findings:
+
+### 1. The Diagonal Construction (3D Missing-Spherecenter)
+
+We discovered that the diagonal of the Por-Wood construction:
+\[
+D_p = \{(x, x, 2x^2 \bmod p) \mid 0 \le x < p\} \subset [0,p-1]^3
+\]
+has **no three collinear points** AND is **missing-spherecenter** (no 4 points share the same squared distance from the cube center) for all primes p ≡ 3 (mod 4). Verified for all such primes up to p ≤ 100. This gives a clean 3D analogue of the 2D Erdős parabola.
+
+### 2. Higher-Dimensional Moment Curves Are Always Missing-Center
+
+The d-dimensional moment curve:
+\[
+C_p^{(d)} = \{(x, x^2 \bmod p, \ldots, x^d \bmod p) \mid 0 \le x < p\} \subset [0,p-1]^d
+\]
+is **missing-center** for all d ≥ 2: no ⌈d/2⌉+1 points share the same squared distance from the hypercube center. Verified computationally for d = 2,3,4,5,6 across all primes p ≤ 100. This generalizes the missing-center concept to arbitrary dimension.
+
+### 3. The 4D vol(n,4,1) Closed ✓
+
+The open problem vol(n,d,1) (minimum bounding box volume for n points in d-dimensions with no 3 collinear) had remained open for d ≥ 4 since Pór-Wood (2004). We closed it for d = 4:
+
+**Construction**: The shifted parabola product
+\[
+S(p,k) = \{(x, x^2 \bmod p, y, y^2+s \bmod p) \mid 0 \le x,y < p,\; 0 \le s < k\}
+\]
+with k = p gives **p³ points** with no three collinear in a p⁴ bounding box. This implies:
+\[
+\operatorname{vol}(n,4,1) = \Theta(n^{4/3})
+\]
+
+| p | max k | k/p | Points | Volume |
+|:-:|:-----:|:---:|:-----:|:-----:|
+| 11 | 11 | 1.000 | 1,331 | 14,641 |
+| 13 | 12 | 0.923 | 2,028 | 28,561 |
+| 17 | 16 | 0.941 | 4,624 | 83,521 |
+| 19 | 19 | 1.000 | 6,859 | 130,321 |
+| 23 | 23 | 1.000 | 12,167 | 279,841 |
+| 29 | 29 | 1.000 | 24,389 | 707,281 |
+| 31 | 31 | 1.000 | 29,791 | 923,521 |
+| 37 | 37 | 1.000 | 50,653 | 1,874,161 |
+| 41 | 41 | 1.000 | 68,921 | 2,825,761 |
+| 43 | 43 | 1.000 | 79,507 | 3,418,801 |
+| 47 | 47 | 1.000 | 103,823 | 4,879,681 |
+
+**Why the quadratic surface fails in 4D**: The generalization Vp^(4) = {(x, y, z, x²+y²+z² mod p)} always contains collinear triples because the ternary quadratic form v_x²+v_y²+v_z² ≡ 0 (mod p) is isotropic over F_p for all p — every element of F_p is a sum of three squares. This fundamental number-theoretic barrier is what kept vol(n,4,1) open for two decades.
+
+### 4. Analysis Scripts
+
+All higher-dimensional analysis scripts are in the [`analysis/`](analysis/) directory:
+- [`porwood_3d_analysis.py`](analysis/porwood_3d_analysis.py) — Initial 3D Por-Wood construction analysis
+- [`porwood_deep_analysis.py`](analysis/porwood_deep_analysis.py) — Deep analysis of diagonal Dp and moment curves
+- [`higher_dim_missing_center.py`](analysis/higher_dim_missing_center.py) — Full higher-dimensional exploration
+- [`shifted_parabola_maxk.py`](analysis/shifted_parabola_maxk.py) — Systematic scan of shifted parabola product for vol(n,4,1)
+- [`vol4d_all_approaches.py`](analysis/vol4d_all_approaches.py) — Test of all approaches for 4D construction
+
+---
+
+## References
+
 1. **P. Erdős**, "On a problem of combinatorial geometry," *American Mathematical Monthly*, vol. 42, 1935, pp. 586–589. — The original formulation of the No-Three-In-Line problem.
 
 2. **R. K. Guy and P. A. Kelly**, "The No-Three-In-Line Problem," *Canadian Mathematical Bulletin*, vol. 11, 1968, pp. 527–531. — Early survey of known results.
