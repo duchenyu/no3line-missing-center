@@ -891,17 +891,17 @@ satisfies:
 Proof: For three distinct points (xᵢ, xᵢ, 2xᵢ² mod p) with i=1,2,3, the direction vectors are (Δx, Δx, 2Δx·(x₁+x₂)) and (Δx', Δx', 2Δx'·(x₁+x₃)). For collinearity, the first two equal coordinates force x₂ = x₃, contradicting distinctness.
 
 **(ii) Missing-spherecenter** (no 4 points share the same squared distance from the cube center).  
-Proof: The squared distance d²(x) = 2(2x-(p-1))² + (2(2x² mod p)-(p-1))² satisfies d²(x) = d²(p-x) by symmetry — each value appears at most twice. For p ≡ 3 (mod 4), the equation d²(x₁) = d²(x₂) with x₁ ≠ ±x₂ (mod p) has no solutions in F_p. Verified for all primes p ≤ 97 (max multiplicity ≤ 2 for p ≡ 3 mod 4, ≤ 3 for all p ≤ 97).
+Proof: The squared distance d²(x) = 2(2x-(p-1))² + (2(2x² mod p)-(p-1))² satisfies d²(x) = d²(p-x) by symmetry. The claim that d²(x₁) = d²(x₂) with x₁ ≠ ±x₂ (mod p) has no solutions for p ≡ 3 (mod 4) is supported by computational verification up to p ≤ 97 (max multiplicity ≤ 2 for p ≡ 3 mod 4, ≤ 3 for all p ≤ 97). A complete algebraic proof of the missing-center property remains open.
 
-This gives a clean 3D analogue of the 2D Erdős parabola, with a complete algebraic proof.
+This gives a clean 3D analogue of the 2D Erdős parabola, with a complete algebraic proof of no-collinearity and strong computational evidence for the missing-center property.
 
-### 2. Higher-Dimensional Moment Curves Are Always Missing-Center
+### 2. Conjecture: Higher-Dimensional Moment Curves Are Missing-Center
 
 The d-dimensional moment curve:
 \[
 C_p^{(d)} = \{(x, x^2 \bmod p, \ldots, x^d \bmod p) \mid 0 \le x < p\} \subset [0,p-1]^d
 \]
-is **missing-center** for all d ≥ 2: no ⌈d/2⌉+1 points share the same squared distance from the hypercube center. Verified computationally for d = 2,3,4,5,6 across all primes p ≤ 100. This generalizes the missing-center concept to arbitrary dimension.
+is conjectured to be **missing-center** for all d ≥ 2: no ⌈d/2⌉+1 points share the same squared distance from the hypercube center. This is supported by computational evidence for d = 2,3,4,5,6 across all primes p ≤ 100. A rigorous proof for d ≥ 3 remains open.
 
 ### 3. Why 4D is Fundamentally Harder
 
