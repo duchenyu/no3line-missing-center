@@ -895,15 +895,18 @@ C_p^{(d)} = \{(x, x^2 \bmod p, \ldots, x^d \bmod p) \mid 0 \le x < p\} \subset [
 \]
 is **missing-center** for all d ≥ 2: no ⌈d/2⌉+1 points share the same squared distance from the hypercube center. Verified computationally for d = 2,3,4,5,6 across all primes p ≤ 100. This generalizes the missing-center concept to arbitrary dimension.
 
-### 3. The 4D vol(n,4,1) Closed ✓
+### 3. An Elementary 4D Construction for vol(n,4,1)
 
-The open problem vol(n,d,1) (minimum bounding box volume for n points in d-dimensions with no 3 collinear) had remained open for d ≥ 4 since Pór-Wood (2004). We closed it for d = 4:
+The problem vol(n,d,1) (minimum bounding box volume for n points in d-dimensions with no 3 collinear) was studied by Pór-Wood (2004) who established the lower bound Ω(n^{d/(d-1)}). 
+For d=4, the best known upper bound follows from an independent construction using the compression method [arXiv:2106.15621], which shows D₄(n) = Θ(n³) points in an n⁴ grid, implying vol(n,4,1) = O(n^{4/3}).
+
+Our contribution is an alternative **elementary construction** based on shifted parabola products:
 
 **Construction**: The shifted parabola product
 \[
 S(p,k) = \{(x, x^2 \bmod p, y, y^2+s \bmod p) \mid 0 \le x,y < p,\; 0 \le s < k\}
 \]
-with k = p gives **p³ points** with no three collinear in a p⁴ bounding box. This implies:
+with k = p gives **p³ points** with no three collinear in a p⁴ bounding box. This provides an explicit, simple construction achieving the optimal density:
 \[
 \operatorname{vol}(n,4,1) = \Theta(n^{4/3})
 \]
@@ -922,7 +925,7 @@ with k = p gives **p³ points** with no three collinear in a p⁴ bounding box. 
 | 43 | 43 | 1.000 | 79,507 | 3,418,801 |
 | 47 | 47 | 1.000 | 103,823 | 4,879,681 |
 
-**Why the quadratic surface fails in 4D**: The generalization Vp^(4) = {(x, y, z, x²+y²+z² mod p)} always contains collinear triples because the ternary quadratic form v_x²+v_y²+v_z² ≡ 0 (mod p) is isotropic over F_p for all p — every element of F_p is a sum of three squares. This fundamental number-theoretic barrier is what kept vol(n,4,1) open for two decades.
+**Why the quadratic surface fails in 4D**: The generalization Vp^(4) = {(x, y, z, x²+y²+z² mod p)} always contains collinear triples because the ternary quadratic form v_x²+v_y²+v_z² ≡ 0 (mod p) is isotropic over F_p for all p — every element of F_p is a sum of three squares. This explains why a different construction (the shifted parabola product) is needed for the 4D case.
 
 ### 4. Analysis Scripts
 
@@ -954,6 +957,8 @@ All higher-dimensional analysis scripts are in the [`analysis/`](analysis/) dire
 8. **J. H. Conway and R. K. Guy**, *The Book of Numbers*, Springer, 1996. — Fermat's theorem on sums of two squares (used in the refined model).
 
 9. **A. Pór and D. R. Wood**, "No-Three-in-Line-in-3D," *Algorithmica*, vol. 47, 2007, pp. 481–488 (originally in *Proc. GD 2004*, LNCS 3383, pp. 395–402). — Proved the 3D no-three-in-line maximum is Θ(n²) and established the vol(n,d,1) framework. The construction Vp = {(x, y, x²+y² mod p)} for p ≡ 3 (mod 4) is the foundation of our higher-dimensional analysis.
+
+10. **Anonymous**, "On the general no-three-in-line problem," arXiv:2106.15621v9, 2021–2026. — Extended the problem to arbitrary dimensions using the compression method, achieving Ω(n^{d-1}·d^{1/(2d)}) points in a d-dimensional n-grid. Their result independently implies vol(n,4,1) = O(n^{4/3}) and complements our elementary shifted parabola construction.
 
 ## Acknowledgments
 
