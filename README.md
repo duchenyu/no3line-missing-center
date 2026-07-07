@@ -8,7 +8,7 @@ An optimized exhaustive search for **missing-center** solutions to the No-Three-
 
 ## The Problem
 
-Place **2n points** on an **n×n grid** such that no three are collinear. The No-Three-In-Line problem asks for the maximum number of points D(n) achievable. 2n-point solutions have been found for all n ≤ 52 (classical result), and for n = 65, 67, 69, 70, 72 via SAT solvers (Heule, 2026). n = 71 is the only n ≤ 72 with no known 2n-point solution — D(71) remains unresolved. The n=72 solution was found by Marijn Heule (CMU) on 2026-06-25 using a SAT solver with C₄ (90° rotational) symmetry — by our C₄ theorem (proved below), this solution necessarily has the grid center as a circumcenter, so it is **not** a missing-center solution.
+Place **2n points** on an **n×n grid** such that no three are collinear. The No-Three-In-Line problem asks for the maximum number of points D(n) achievable. 2n-point solutions have been found for all n ≤ 52 (classical result), and for n = 65, 67, 69, 70, 72 via SAT solvers (Heule, 2026). n = 71 is the only n ≤ 72 with no known 2n-point solution — D(71) remains unresolved.
 
 **Our contribution is not about finding more solutions.** Instead, we ask a new question about the existing ones: for each known 2n-point solution, is the grid center ever a circumcenter of some triple of its points? A **missing-center** solution has **no** triple whose circumcircle is centered at the grid center.
 
@@ -23,7 +23,7 @@ d(x,y) = (2x-(n-1))^2 + (2y-(n-1))^2
 
 If three points have the same \(d\) value, they lie on a circle centered at \(C\), making \(C\) their circumcenter. Conversely, if \(C\) is the circumcenter of three points, those points are equidistant from \(C\) and thus share the same \(d\) value. **The equivalence is exact** — no floating-point approximation is involved.
 
-This is a novel invariant not previously studied in the literature.
+This is a novel invariant not previously studied in the literature. As an example application: the n=72 solution found by Marijn Heule (CMU, 2026-06-25) has C₄ (90° rotational) symmetry. By our C₄ theorem (proved below), any C₄-symmetric 2n-point solution on an odd-n grid necessarily places the grid center as a circumcenter — so that particular solution is *not* a missing-center solution. But for even-n grids, no such automatic guarantee exists, and missing-center solutions do appear (see data below).
 
 ## Key Findings
 
