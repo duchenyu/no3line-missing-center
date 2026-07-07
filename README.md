@@ -537,9 +537,18 @@ The theorem is verified across all 26 even n values from n=6 to n=56 in the [Fla
 | 52 | 5,062 | 100% | 26 | 4 | 4 | ✅ |
 | 54 | 7,696 | 100% | 27 | 4 | 8 | ✅ |
 | 56 | 10,441 | 100% | 28 | 4 | 4 | ✅ |
+| 58 | 19 | 100% | 29 | — | — | ✅ |
+| 60 | 32 | 100% | 30 | — | — | ✅ |
+| 62 | 5 | 100% | 31 | — | — | ✅ |
+| 64 | 25 | 100% | 32 | — | — | ✅ |
+| 66 | 2 | 100% | 33 | — | — | ✅ |
+| 68 | 2 | 100% | 34 | — | — | ✅ |
+| 70 | 1 | 100% | 35 | — | — | ✅ |
 | **72** | **1** | **100%** | **36** | **4** | **8** | **✅** |
 
-Every single rot4 solution across all 27 entries — n=6 (3 solutions) through n=56 (10,441 solutions), plus the n=72 Heule record — has the center as a circumcenter. **Zero exceptions in 33,548 tested solutions** (sum of the rot4 counts in the table: n=6..56 plus n=72).
+Every single rot4 solution across all entries — n=6 (3 solutions) through n=72 (1 solution, Heule 2026) — has the center as a circumcenter. **Zero exceptions in 33,634 tested solutions** (sum of all rot4 counts in the table).
+
+**Note on the sharp drop at n=58**: rot4 solution counts grow exponentially from n=6 to n=56 (from 3 to 10,441), then collapse sharply to 19 at n=58, and decline further to 1 at n=70 and 72. This suggests a structural constraint — possibly the distance-ring capacity limit for rot4 orbits becoming critically tight at these grid sizes. The orbit and ring-population data are omitted for n=58–70 because the `.few` (compact) format encoding used by Flammenkamp for these larger files has not yet been fully decoded.
 
 ### C₄ Evolution Across Even n — From Theory to n=72
 
