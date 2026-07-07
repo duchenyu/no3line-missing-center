@@ -1016,7 +1016,7 @@ If you use this work in research, please cite this repository:
   author = {Du, Junrong},
   title = {no3line-missing-center: No-Three-In-Line Missing Center Analysis},
   year = {2026},
-  url = {https://github.com/duchenyu/no3inline-missing-center} (version v1.0)
+  url = {https://github.com/aujurd22/no3inline-missing-center} (version v1.0)
 }
 ```
 
