@@ -455,6 +455,8 @@ d(x,y) = (2x-(n-1))^2 + (2y-(n-1))^2 = (2R(x)_x-(n-1))^2 + (2R(x)_y-(n-1))^2
 
 **Corollary**: Missing-center solutions cannot have C₄ symmetry.
 
+*Geometric illustration.* The theorem says the center is always a circumcenter, but where are the 4 points that certify it? They are simply the **innermost distance ring** — the 4 points of the solution closest to \(C\), which by construction sit at the same distance from \(C\) and thus lie on a circle centered at \(C\). In 9 of the first 15 even \(n\) (\(n=12\ldots40\)), these 4 points are literally the \(2\times2\) block straddling \(n/2\), i.e. \(\{\lfloor n/2\rfloor,\lceil n/2\rceil\}^2\) (e.g. for \(n=40\): \((19,19),(19,20),(20,19),(20,20)\)) — placed exactly "by \(n/2\)". The remaining 6 solutions (\(n=12,16,18,20,24,26\)) instead use a slightly larger inner diamond, but the role is identical. Either way, this tiny central cluster is the concrete geometric footprint of the theorem: it is the ring that makes \(C\) a circumcenter.
+
 The theorem is verified across all 34 even n values from n=6 to n=72 in the Flammenkamp database (n=6–56 from the standard database, n=58–72 from newer rot4.few files; including Heule's n=70 and n=72 solutions):
 
 | n | rot4 solutions | C₄ pass rate | Orbits | Orbit size | Max ring pop | Center circumcenter? |
