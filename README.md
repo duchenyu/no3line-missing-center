@@ -143,7 +143,7 @@ The empirical threshold lies at ≈74 triples per available pair — the constra
 
 Extended via [mvr/no-three-in-line](https://github.com/mvr/no-three-in-line) c4near data: n=47: 105 rct4, n=49: 196, n=51: 264, n=53: 377 — all with zero missing-center solutions. The sub-exponential growth continues (∼1.4× per 2-step increment).
 
-The rct4 solution count grows slowly (∼O(n) rather than exponential), and ring populations are always 4 or 8 — a parallel **symmetry argument** (distinct from, but analogous to, the C₄ theorem): rct4 orbits have size 4, forcing ≥4 points per distance ring, so the center is always a circumcenter.
+The rct4 solution count grows slowly (∼O(n) rather than exponential), and ring populations are always a **multiple of 4** (empirically 4, 8, 12, or 16 across all 21,601 rot4 solutions for n=12–72) — a parallel **symmetry argument** (distinct from, but analogous to, the C₄ theorem): rct4 orbits have size 4, all four vertices of an orbit-square are equidistant from the centre, so each orbit contributes exactly 4 points to a single distance ring, forcing the centre to be a circumcenter.
 
 **Observation for n=71**: All known solutions for odd n≥33 (and Heule's n=65, 67, 69) in the database are **rct4** — full D₄ symmetry, *not* C₄. (Recall the C₄ theorem applies only to even n; odd n cannot have C₄-symmetric 2n solutions.) If D(71)=2n, the solution would likely be rct4 as well. By the same D₄ group-theoretic argument that governs rct4 (not the C₄ theorem), such a solution would necessarily have the center as a circumcenter. This is consistent with the pattern: no missing-center solutions have been found in any known symmetry class beyond n=31. The caveat applies: iden-class solutions beyond n=20 are not tracked in the database.
 
@@ -305,6 +305,16 @@ This suggests a constructive approach: missing-center solutions can be built by 
 For small n (12, 13), missing-center solutions are disproportionately likely to have **C₂ (180° rotational) symmetry** — 38% at n=12 vs 6% of all solutions. For larger n, this effect vanishes and missing-center solutions have the same symmetry distribution as ordinary solutions.
 
 **C₄ symmetry is never missing-center**: Every solution with 90° rotational symmetry (across all n) has the grid center as a circumcenter. This is a theorem: C₄ symmetry forces points into rotationally symmetric quadruples, making it impossible to keep all distance rings below 3 points.
+
+#### C₂ theorem (180° rotational symmetry)
+
+A broader symmetry invariant, proved in `analysis/lemmas_c2_ring.md` and verified on 3,732 sampled solutions:
+
+> **Theorem.** Let *S* be a 2n-point no-three-in-line solution on an even n×n grid that is invariant under the half-turn R₁₈₀ about the grid centre C. Then *S* decomposes into n R₁₈₀-orbits {p, R₁₈₀(p)}; each orbit defines a line through C; and these n central lines are pairwise distinct (two orbits on one central line would put 4 points on that line, violating no-three-in-line).
+
+The hypothesis "R₁₈₀-invariant" holds exactly for the symmetry classes whose group contains the half-turn: **rot2** (C₂), **rot4** (C₄, since R₁₈₀ = R₉₀²), and **dia2** (V₄ = {id, R₁₈₀, d₁, d₂}, with R₁₈₀ = d₁∘d₂). Classes iden, dia1 (single diagonal reflection only), and ort1/ort2 do **not** contain R₁₈₀ and lie outside the theorem's scope.
+
+Consequence for the D(n)=2n problem: any R₁₈₀-invariant construction automatically eliminates all collinearity *through the centre*; the remaining obstacle is collinearity on lines not through C. This reframes the existence question (the genuinely open lower bound D(n) ≥ 2n) as a constrained-combinatorics problem rather than a pigeonhole upper bound.
 
 ### 5. Relaxing the Row Constraint
 
