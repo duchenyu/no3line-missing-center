@@ -465,8 +465,9 @@ $n$ & Solutions & $\binom{2n}{3}$ & $\binom{2n}{3} / ((n^2-1)/2)$ \\
 27 & 17,332 & 24,804 & 68.1 \\
 29 & 44,828 & 30,856 & 73.5 \\
 31 & \textbf{0} & 37,820 & \textbf{78.8} \\
-33 & 0 & 45,760 & 84.1 \\
+33 & 1$^\dag$ & 45,760 & 84.1 \\
 \bottomrule
+\multicolumn{5}{l}{\footnotesize $^\dag$ One rot2 solution is known at $n=33$ (Flammenkamp database). The sharp SAT-to-UNSAT transition thus occurs at $n=31$ only; $n=33$ is not comparably UNSAT.}
 \end{tabular}
 \end{table}
 
@@ -478,7 +479,7 @@ We have proven that the collinearity constraint for rot2 on odd $n$ admits a cle
 \]
 where $m=(n-1)/2$ and the grid coordinates are $0,\dots,n-1$. Geometrically, this means the two pairs share the same reduced direction from the grid center. The rot2 UNSAT at $n=31$ thus reduces to a direction-uniqueness conflict: at this threshold, the degree constraints (exactly 2 points per row/column) force a set of $n$ pairs whose directions cannot all be distinct. Proving unsatisfiability at $n=31$ from this algebraic characterization is an open combinatorial problem.
 
-For $n\ge 33$, only rct4 solutions remain in the database, and \textbf{rct4 solutions invariably have the grid center as a circumcenter}. This is a group-theoretic necessity for the rct4 class: rct4 (and C$_4$) orbits on odd-$n$ grids have orbit size 4, forcing $\ge 4$ points per distance ring.
+For $n\ge 35$, odd-$n$ solutions in the tracked database are predominantly rct4 (Table~\ref{tab:d4}), and \textbf{rct4 solutions invariably have the grid center as a circumcenter}. This is a group-theoretic necessity for the rct4 class: rct4 (and C$_4$) orbits on odd-$n$ grids have orbit size 4, forcing $\ge 4$ points per distance ring. A single rot2 solution exists at $n=33$ (Flammenkamp database, partial result), but its missing-center status---and whether it represents an isolated survivor or a larger pattern---remains undetermined.
 
 Thus, within the catalogued symmetry classes, missing-center solutions are absent for all odd $n\ge 33$. The center is always a circumcenter in every solution recorded in the Flammenkamp database above this threshold. \textbf{Caveat}: iden-class (non-symmetric) solutions are only tracked up to $n=20$ in the database, so the existence of iden-class missing-center solutions at larger odd $n$ remains an open question.
 
