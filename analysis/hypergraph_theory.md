@@ -6,7 +6,7 @@ From empirical data on H_n^dir for n=12..32, we observe:
 
 **Empirical Fact 1 (Heavy-Direction Dominance)**. Let D₆ = {(±1,±1), (±3,±1), (±1,±3)} be the set of 6 directions with maximal slope one in the sense that their run or rise has absolute value ≤ 3. Then ≥ 89% of all hyperedges of H_n involve at least one direction from D₆.
 
-**Empirical Fact 2 (Low-Slope Emptiness)**. Let L = {(a,b): gcd(a,b)=1, |a|≤3, |b|≤3} \ D₆ be the set of low-slope directions excluding the heavy ones. For all n ≤ 32 tested, **no hyperedge is contained entirely within L**. The induced sub-hypergraph H_n[L] is empty.
+**Empirical Fact 2 (Low-Slope Emptiness)**. Let L = {(a,b): gcd(a,b)=1, |a|≤3, |b|≤3} \ D₆ be the set of low-slope directions excluding the heavy ones. For all n ≤ 60 tested, **no hyperedge is contained entirely within L**. The induced sub-hypergraph H_n[L] is empty.
 
 These two facts suggest a **decomposition strategy** for analyzing α(H_n):
 
@@ -130,7 +130,7 @@ Conversely:
 
 ### 4.2 Empirical Status — Categorical Refutation of Extinction
 
-**The "extinction" hypothesis (no missing-center solutions for n ≥ 32) is REFUTED by the data.** The apparent disappearance is entirely a **data-coverage artefact**:
+**The claim that missing-center disappears at n≥32 is REFUTED by the rot2 data.** The apparent disappearance is best explained as a **data-coverage artefact**:
 
 **Key evidence — rot2 class at odd n (FULL enumeration from Flammenkamp database)**:
 
@@ -163,7 +163,7 @@ Missing-center solutions in the rot2 class **persist with stable frequency** (~5
 
 This transforms the open problem from "does missing-center die at large n?" to **"does the iden class have missing-center solutions at arbitrarily large n?"** — a question answerable via computational search.
 
-## 5. rot2 UNSAT at n=31 — Number-Theoretic Analysis
+## 5. rot2 UNSAT at n=31 — Current Understanding
 
 ### 5.1 The Central Obstruction
 
@@ -175,24 +175,28 @@ rot2 on odd n = 2m+1: the center row (r=m) has a UNIQUE reduced direction (0,1) 
 |---|-----------|------------|---------|-----------|-----------|-------------|-----------|
 | 27 | 232 | 28 | 204 | 1 | 25.1 | 1 | 17,332 |
 | 29 | 256 | 30 | 226 | 1 | 27.1 | 1 | 44,828 |
-| 31 | 288 | 32 | 256 | 1 | 29.1 | **4** | **0** |
-| 33 | 320 | 34 | 286 | 1 | 31.1 | **4** | **0** |
+| 31 | 288 | 32 | 256 | 1 | 29.1 | **4** | **0** (exhaustive) |
+| 33 | 320 | 34 | 286 | 1 | 31.1 | **4** | **1 known** (partial) |
 | 35 | 384 | 36 | 348 | 1 | 33.1 | 1 | unknown |
 | 37 | 408 | 38 | 370 | 1 | 35.1 | 1 | unknown |
 
-The direction pool is **never the bottleneck** (surplus grows ~n²). The key observation:
+The direction pool is **never the bottleneck** (surplus grows ~n²).
 
-- n=31 and n=33 both have v₂((n²-1)/4) = 4 (i.e., 2⁴ divides (n²-1)/4)
-- n=27, 29, 35, 37 all have v₂((n²-1)/4) = 1
-- The 2-adic valuation jump from 1→4 coincides EXACTLY with the UNSAT threshold
+### 5.3 v₂ Correlation is NOT Causal
 
-### 5.3 Proposed Mechanism
+The 2-adic valuation v₂((n²-1)/4) jumps from 1 to 4 at n=31 — a striking correlation. However, n=33 also has v₂=4 yet has at least 1 known rot2 solution. Therefore v₂ is **not a sufficient condition** for UNSAT.
 
-The 2-adic valuation v₂((n²-1)/4) = v₂((n-1)(n+1)/4) measures the power of 2 dividing the number of available directions per domain row. When v₂ ≥ 4, the direction distribution becomes **even-constrained**: the number of directions with specific parity patterns becomes insufficient for the antipodal pairing constraint. (In progress — numerical verification ongoing.)
+Furthermore, the direction-uniqueness constraint ALONE (ignoring collinearity) is satisfiable at n=31 via greedy matching (verified up to m=17). This proves that the true cause of the n=31 UNSAT is the **collinearity hypergraph constraint**, not direction availability or parity.
 
-### 5.4 Relation to C2 Theorem
+The precise number-theoretic mechanism by which the collinearity constraint creates an unavoidable obstruction at n=31 remains an open problem.
 
-The C2 theorem (direction uniqueness) already proves that direction (0,1) is exclusively reserved for the center row. This leaves (n-1)/2 remaining domain rows to select from 2m+1 columns with (0,1) excluded. At n=31 (m=15), this means 15 rows × 2 = 30 selections from ~(2·15+1-2)²/2 ≈ 420 non-(0,1) directions — still abundant. The precise obstruction requires analyzing the matching structure.
+### 5.4 What We Know
+
+1. ✅ **Direction uniqueness is SAT**: Greedy matching finds 2 distinct directions per row for all m ≤ 17 (n ≤ 35).
+2. ✅ **n=31 is UNSAT**: Confirmed by exhaustive enumeration (Flammenkamp database).
+3. ✅ **n=33 is SAT**: At least 1 valid rot2 solution exists (Flammenkamp partial catalogue, verified 2-per-row, 180° symmetric, zero collinear triples).
+4. ❌ **v₂ is not the cause**: Both n=31 and n=33 have v₂=4 but only n=31 is UNSAT.
+5. ❓ **The real cause is unknown**: The collinearity hypergraph constraint at n=31 creates an obstruction that does not exist at n=29 or n=33. The exact mechanism is an open problem.
 
 ## 6. C4 Phase Transition (Mid-Term Result)
 
@@ -258,15 +262,15 @@ Each constraint alone is "easy" (sufficient degrees of freedom). Their **interse
 | Our 3-way search (2h, 0 solutions) | n=76 may be UNSAT | Weak — insufficient search time |
 | Hypergraph model (160 expected violations per random N-set) | P(solution) ≈ exp(-c·N^α), α > 1 | Medium |
 
-**Most likely scenario**: n=76 has 0-10 C4 solutions, requiring either (a) a much more sophisticated SAT encoding (Heule-style) or (b) weeks/months of GPU search to find.
+**Most likely scenario**: n=76 has few C4 solutions (at most a few dozen, possibly zero), requiring either (a) a much more sophisticated SAT encoding (Heule-style) or (b) weeks/months of GPU search to find.
 
-### 5.4 What Remains Open
+### 6.6 What Remains Open
 
 The fundamental question: **does the C4 problem on even n eventually become UNSAT for all sufficiently large n, or is every n solvable with just increasingly rare solutions?**
 
 This is equivalent to: can we construct explicit C4 solutions for arbitrarily large even n?
 
-## 6. Recommended Next Steps (Revised)
+## 7. Recommended Next Steps (Revised)
 
 ### S1. Formal Proof of Low-Slope Emptiness
 **Status**: Empirically verified n=12..60. Requires an algebraic proof.
@@ -283,10 +287,10 @@ This is equivalent to: can we construct explicit C4 solutions for arbitrarily la
 **Recommendation**: Can keep running background search, but no longer highest priority — the rot2 data provides a complete answer.
 
 ### S4. Characterize rot2 UNSAT Threshold
-**Status**: 🆕 New direction. rot2 becomes UNSAT at n=31 (proved by our earlier analysis). But WHY n=31 specifically?
-**Approach**: The rot2 direction-uniqueness constraint plus degree constraints create a parity/divisibility condition that becomes unsatisfiable at n=31. This is a candidate for a **purely number-theoretic proof**.
+**Status**: 🆕 New direction. rot2 becomes UNSAT at n=31 (verified empirically). But WHY n=31 specifically?
+**Approach**: The direction-uniqueness constraint alone is easily satisfiable (verified by greedy matching). The UNSAT must arise from the collinearity hypergraph. A purely number-theoretic proof remains elusive.
 
-### S4. C4 Hypergraph → Turán-type Bound
+### S5. C4 Hypergraph → Turán-type Bound
 **Status**: New direction.
 **Approach**: Since container method doesn't apply directly, use the **Turán number** for 3-uniform hypergraphs. The C4 domain hypergraph C_n has density d(N). The Turán theorem for 3-uniform hypergraphs gives an upper bound on the size of the largest independent set.
 **Key computation**: ex(N², C_n) = maximum size of an independent set in C_n. We need ex ≥ N for a C4 solution to exist.
