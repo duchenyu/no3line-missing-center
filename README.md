@@ -252,7 +252,7 @@ $^\\ddagger$ Type classification: **Even** for even $n$, **Odd C** for odd compo
 | 30 | 24,925 | 534 | 2.1% | rot2, dia1, dia2, rot4 |
 | **31** | **72** | **1** | **1.4%** | dia1, dia2, rct4 |
 | 32 | 175 | 0 | 0.0% | dia1, dia2, rot4 |
-| 33 | 14 | 0 | 0.0% | rct4 |
+| 33 | 15 | 0 | 0.0% | rct4, rot2 |
 | 34 | 172 | 0 | 0.0% | rot4 |
 | 35 | 24 | 0 | 0.0% | rct4, dia2 |
 | 36 | 282 | 0 | 0.0% | dia2, rot4 |
@@ -280,21 +280,21 @@ The complete odd-$n$ spectrum (n=7→45) reveals three distinct evolutionary pha
 
 **Phase 2 — Decline (n=21–29)**: rot2 becomes the dominant class. Missing-center rate oscillates at lower levels than Phase 1: 7.8% (n=21) → 5.8% (n=23) → 6.2% (n=25) → 4.5% (n=27) → 4.8% (n=29), with even-n entries dipping to ~1.6–2.5%. The catalogued total grows steadily (2,426 at n=21 → 4,003 at n=23 → 9,040 at n=25 → 44,890 at n=29) due to rot2's exponential growth — note this is a *lower base* than n=19 (32,577): the iden class that dominates small-n totals is only tracked up to n=20 in Flammenkamp's database, so the apparent "explosion" starts after a sharp drop at the n=19→21 boundary.
 
-**Phase 3 — Absence in Catalogued Classes (n≥31)**: **rot2 solutions vanish at n=31** — a sharp SAT unsatisfiability transition observed empirically. The transition correlates with collinearity constraint density:
+**Phase 3 — Absence in Catalogued Classes (n≥31)**: rot2 solutions become **empirically unsatisfiable at n=31** (zero solutions, confirmed by exhaustive enumeration) — a sharp SAT→UNSAT transition — yet a **single rot2 solution reappears at n=33** (Flammenkamp `n33_rot2.few`). The transition correlates with collinearity constraint density:
 
 | n | rot2 solutions | Available pairs | Need | $\binom{2n}{3}$ per pair |
 |---|---|---|---|---|
 | 27 | 17,332 | 364 | 27 | 68.1 |
 | 29 | 44,828 | 420 | 29 | 73.5 |
 | **31** | **0** | 480 | 31 | **78.8** |
-| 33 | 0 | 544 | 33 | 84.1 |
+| 33 | 1 | 544 | 33 | 84.1 |
 
-The empirical threshold lies at ≈74 triples per available pair — the constraint density crosses a critical value where no rot2 assignment satisfies all collinearity constraints simultaneously. The exact mechanism remains an open combinatorial problem. Only rct4 solutions survive at n≥31 in the database, and all known rct4 solutions have the center as circumcenter (verified on all 326 catalogued odd-n rct4 solutions; a general proof is not established). Note that rct4 is R₁₈₀-invariant (hence governed by the C₂ theorem below), but its orbits can have size 2 (points on a reflection axis), so the "≥4 points per ring" argument used for C₄ does not apply. **Missing-center solutions are not found in any known symmetry class for odd n ≥ 33. However, iden-class (non-symmetric) solutions are only tracked up to n=20 in the database, so the possibility of iden-class missing-center solutions at larger n remains open.**
+The empirical threshold lies at ≈74 triples per available pair — the constraint density crosses a critical value where no rot2 assignment satisfies all collinearity constraints simultaneously. The exact mechanism remains an open combinatorial problem. Only rct4 solutions survive for n≥35 in the database (a single rot2 solution exists at n=33); all known rct4 solutions have the center as circumcenter (verified on all 326 catalogued odd-n rct4 solutions; a general proof is not established). Note that rct4 is R₁₈₀-invariant (hence governed by the C₂ theorem below), but its orbits can have size 2 (points on a reflection axis), so the "≥4 points per ring" argument used for C₄ does not apply. **Missing-center solutions are not found in any known symmetry class for odd n ≥ 33. However, iden-class (non-symmetric) solutions are only tracked up to n=20 in the database, so the possibility of iden-class missing-center solutions at larger n remains open.**
 
 | n | 31 | 33 | 35 | 37 | 39 | 41 | 43 | 45 |
 |---|----|----|----|----|----|----|----|-----|
 | Missing | 1 | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
-| Symmetry | dia1 | rct4 | rct4 | rct4 | rct4 | rct4 | rct4 | rct4 |
+| Symmetry | dia1 | rct4, rot2 | rct4 | rct4 | rct4 | rct4 | rct4 | rct4 |
 | rct4 count | 5 | 14 | 23 | 21 | 33 | 35 | 63 | 106 |
 
 Extended via [mvr/no-three-in-line](https://github.com/mvr/no-three-in-line) c4near data: n=47: 105 rct4, n=49: 196, n=51: 264, n=53: 377 — all with zero missing-center solutions. The sub-exponential growth continues (∼1.4× per 2-step increment).
@@ -319,7 +319,7 @@ n=44: 1,016 → n=46: 1,366 → n=48: 2,124 → n=50: 3,381 → n=52: 5,062 → 
 The growth rate is ≈1.5× per 2-step increment, with no sign of slowing. This provides strong evidence for **D(n)=2n for all even n**, though a formal proof remains open. n=71 is the only n ≤ 72 with no known 2n-point solution. No rot4 solution is known for n=74 as of 2026-06-25.
 
 **Key observations**:
-- **Even n**: n=8 and n=10 have **zero** missing-center solutions. Missing-center solutions appear at n=12 and persist through n=30 (52 → 11 → 103 → 345 → 21 → 54 → 106 → 306 → 534), confirming a genuine geometric threshold. At n≥32, catalogued solutions revert to zero missing-center, as only rot4 and dia2 symmetry classes survive (rot2 vanishes at n=31). See §3.11 for analysis.
+- **Even n**: n=8 and n=10 have **zero** missing-center solutions. Missing-center solutions appear at n=12 and persist through n=30 (52 → 11 → 103 → 345 → 21 → 54 → 106 → 306 → 534), confirming a genuine geometric threshold. At n≥32, catalogued solutions revert to zero missing-center, as only rot4 and dia2 symmetry classes survive (rot2 becomes UNSAT at n=31, with a single n=33 exception). See §3.11 for analysis.
 - **Odd n**: Missing counts grow dramatically: 1 → 1 → 6 → 46 → 354 → 357 → 2,363, with a notable near-plateau at n=15→17 (354→357).
 - Missing/Total ratio varies with n mod 4 and primality, but no simple parity classification fully explains the pattern (regression analysis shows mod4 has a modest effect, coefficient ≈ 0.77, while primality dominates at ≈ 2.95).
 
@@ -646,7 +646,7 @@ We analyzed the precise conditions under which odd $n$ grids admit missing-cente
 1. **Absence in catalogued symmetry classes at $n\ge 33$.** All odd $n\ge 7$ satisfy the ring capacity constraint (enough rings with $\le$2 points to hold $2n$ points), with slack actually *increasing* from 1.36× at $n=7$ to 5.21× at $n=45$. Within the catalogued symmetry classes:
 
    - At $n=31$, **rot2 solutions become empirically unsatisfiable** — zero solutions remain
-   - At $n\ge 33$, **only rct4 solutions survive in the database**
+   - At $n\ge 33$, rct4 is the dominant surviving class, but **a single rot2 solution exists at $n=33$** (Flammenkamp `n33_rot2.few`), so rot2 does not universally vanish for all $n\ge 31$
    - rct4 solutions inherently have $\ge 4$ points per distance ring ($D_4$ orbit structure) → center is always a circumcenter
    - Therefore missing-center solutions are not found in any tracked symmetry class for odd $n\ge 33$. **Caveat**: iden-class solutions are only tracked up to $n=20$.
 
@@ -767,7 +767,7 @@ These failures are *algorithmic limitations, not a proof of non-existence* (2n s
 
 *(These observations are based on computational analysis of all 33,534 unique C₄ solutions in the Flammenkamp database (n=12..56). They are **empirical regularities**, not proven theorems.)*
 
-**1. Cycle Structure Law** — Almost all C₄ solutions have cycle structure `[m]` (single m-cycle) or `[m-1, 1]` (single (m-1)-cycle + self-loop). Across all m=6..28, these two structures combined account for 35–67% of all solutions. The third most common structure is typically `[m-3, 3, 1]` or `[m-4, 4]`, appearing in less than 5% of cases.
+**1. Cycle Structure Law** — Among n=12–56 C₄ solutions, `[m]` (single m-cycle) and `[m-1, 1]` (single (m-1)-cycle + self-loop) are the two most common structures, together accounting for 35–67% of solutions (only ~35% at the largest m=28, so they are *not* "almost all"). The third most common structure is typically `[m-3, 3, 1]` or `[m-4, 4]`, appearing in less than 5% of cases. At larger n (n=58–72) multi-cycle decompositions dominate, so this regularity is specific to the n=12–56 window.
 
 | m | Main structure 1 | Main structure 2 | Combined |
 |:-:|:----------------:|:----------------:|:--------:|
@@ -790,7 +790,7 @@ These failures are *algorithmic limitations, not a proof of non-existence* (2n s
 
 **The obstruction is higher‑order, not pairwise (EMPIRICAL).** A pairwise (graph) conflict model is the wrong abstraction: `direction_d_conflict_graph.py` finds near‑zero orbit‑pair conflicts yet the corresponding SAT instance is UNSAT at n=31. The correct object is a **3‑uniform danger hypergraph** `H_n` (orbits = vertices; a triple is forbidden iff its 6 points contain an off‑centre collinear triple). A solution of (★) is exactly an independent set of size `n` in `H_n`.
 
-**Danger is sparse and concentrated (EMPIRICAL, `danger_hypergraph.py`).** Forbidden triples are rare and *decrease* with `n` (1.16% → 0.80% → 0.48% of all orbit‑triples at n=12,16,20). The danger‑degree is dominated by low‑slope directions — the main diagonal `(1,1)` alone carries 743 → 2493 → 6209 of the danger at n=12,16,20. Real solutions have *lower* mean danger than a random `n`‑subset of directions (99 vs 118; 177 vs 320; 314 vs 631), i.e. they actively steer away from dangerous directions. Every sampled solution is a verified independent set in `H_n`.
+**Danger is non‑trivial but concentrated (EMPIRICAL, `danger_hypergraph.py`).** Forbidden triples *decrease* with `n` (12.14% → 8.20% → 5.51% of all orbit‑triples at n=12,16,20 — corrected from an earlier buggy count that reported values ~10× smaller). The danger‑degree is dominated by low‑slope directions — the main diagonal `(1,1)` alone carries 3261 → 10434 → 25057 of the danger at n=12,16,20 (far exceeding the next‑ranked `(3,±1)` directions by a factor of roughly 5). Real solutions have *lower* mean danger than a random `n`‑subset of directions (99 vs 118; 177 vs 320; 314 vs 631), i.e. they actively steer away from dangerous directions. In the genuine‑hypergraph sense (a triple is forbidden iff its 6 points contain an off‑centre collinear triple) the sampled solutions are independent sets in `H_n`; under the looser reading where any 6 points spanning a collinear triple are forbidden, solutions need not be independent sets, so the "every/verified" claim should not be taken absolutely.
 
 > **ⓘ Theoretical potential**: This hypergraph formulation recasts the existence problem as an independence-number question $\alpha(H_n) \ge n$ in a 3‑uniform hypergraph with non‑random structure. This perspective opens the door to tools not applicable to the original geometric formulation — Turán‑type bounds, the container method, or probabilistic arguments — and is arguably the most promising path toward a theoretical characterization of extremal no‑three‑in‑line configurations.
 
