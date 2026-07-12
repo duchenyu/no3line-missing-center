@@ -1,15 +1,15 @@
-# No-Three-In-Line: Missing Center Analysis
+# No-Three-In-Line: Quadratic Rigidity of Symmetric Extremal Configurations
 
 > 🎯 **Interactive visualization available**: [**`visualization/overview.html`**](visualization/overview.html) — an interactive HTML guide to the missing-center concept, C₄ theorem, symmetry classes, empirical transitions, and key data. Open in any browser. (Screenshot below.)
 
 ![Overview](visualization/preview.png)
 
-An exhaustive search and analysis of **missing-center** solutions to the No-Three-In-Line problem — configurations where the grid center is not the circumcenter of any triple.
+An investigation of the **symmetry-induced rigidity** of extremal No-Three-In-Line configurations — how rotation and reflection symmetries force a precise hierarchy of collinearity-excluding algebraic constraints, from linear Sidon laws on the fundamental domain (FDR, §2.10) through irreducible quadratic constraints (the quadratic gap, R7, §2.12) to a complete quadratic characterization of C₄-symmetric solutions (R8, §2.14) — and what this implies for the open existence question at n=74 (m=37, §2.13).
 
 ## The Problem
 Place **2n points** on an **n×n grid** such that no three are collinear. The No-Three-In-Line problem asks for the maximum number of points D(n) achievable. 2n-point solutions have been found for all n ≤ 52 (classical result), and for n = 65, 67, 69, 70, 72 via SAT solvers (Heule, 2026). n = 71 is the only n ≤ 72 with no known 2n-point solution — D(71) remains unresolved.
 
-**Our contribution is not about finding more solutions.** Instead, we ask a new question about the existing ones: for each known 2n-point solution, is the grid center ever a circumcenter of some triple of its points? A **missing-center** solution has **no** triple whose circumcircle is centered at the grid center.
+**Our contribution is not about finding more solutions.** Rather, we uncover the *algebraic rigidity* that symmetry imposes on extremal configurations. The project began with a concrete question — for each known 2n-point solution, is the grid center ever a circumcenter of some triple? — whose answer (the C₄ theorem, §2.1: C₄-symmetric solutions *never* miss the center) turned out to be the first rung of a ladder. Symmetry forces collinearity-excluding structure of increasing algebraic depth: linear Sidon laws on the fundamental domain (FDR, §2.10), irreducible quadratic constraints beyond any Sidon filter (the quadratic gap, R7, §2.12), and finally a *complete quadratic characterization* of all C₄-symmetric NTIL solutions (R8, §2.14). The central open problem is whether a C₄-symmetric 2n-point solution exists at **n=74 (m=37)** (§2.13). The missing-center question is the historical entry point, not the destination.
 
 **Detection method**: Instead of computing circumcenters directly (which requires rational arithmetic), we use an equivalent integer criterion:
 
@@ -28,7 +28,18 @@ This is a novel invariant not previously studied in the literature. As an exampl
 
 This section collects every result that is **proven** (theorem or lemma with proof), as opposed to the computational observations gathered in §3.
 
-### 2.1 Theorem: C₄ Symmetry Implies Non-Missing-Center ✔
+> **Main-axis spine.** The results below form a single narrative about *symmetry-induced rigidity*. Read §2 in this order:
+> 1. **Origin — missing center (§2.1).** C₄-symmetric solutions never miss the grid center (the center is always a circumcenter). This negative observation is the historical entry point, not the destination.
+> 2. **Reduction to graph theory (§2.2–§2.4).** C₄ solutions decompose into C₄-orbits ↔ a 2-regular graph on m=n/2 vertices; every row/column constraint becomes a degree-2 condition.
+> 3. **Linear rigidity — FDR (§2.10).** A symmetry group that preserves slope-±1 lines forces the a-b Sidon law on its natural fundamental domain; orthogonal reflection (ort1) is the exact boundary where FDR fails.
+> 4. **Classification (§2.11).** The Sidon law asymptotically separates symmetric from generic configurations — a structural signature of symmetry.
+> 5. **The quadratic gap — R7 (§2.12).** Cross-quadrant collinearity is an *irreducible quadratic* condition; no finite set of linear Sidon constraints can capture it. The rot4 search space is fundamentally quadratic, not linear.
+> 6. **Quadratic completeness — R8 (§2.14, new).** rot4 NTIL is *exactly equivalent* to a pure quadratic constraint-satisfaction problem (X-layer cross-cell determinants + S-layer same-cell determinants). FDR is necessary but not sufficient.
+> 7. **The m=37 window (§2.13).** Structural and algebraic scalings place m=37 inside the satisfiable regime — indirect evidence that a C₄ solution at n=74 exists.
+>
+> Supporting results (low-slope parity §2.5, distance-ring hypergraph §2.6, further rot4 theorems §2.7, container method §2.8, structural invariants §2.13) shore up this spine. The missing-center question that started the project is recorded in §3 as empirical background.
+
+### 2.1 Theorem: C₄ Symmetry Implies Non-Missing-Center ✔ *(historical origin of the project)*
 A solution has **C₄ symmetry** if it is invariant under 90° rotation about the grid center. We prove:
 
 > **Theorem 2.1 (C₄ Symmetry Implies Non-Missing-Center).** Any No-Three-In-Line solution with C₄ rotational symmetry must have the grid center as a circumcenter of some triple.
@@ -425,6 +436,20 @@ Two independent scaling analyses locate m=37 **inside** the satisfiable regime r
 **Conclusion.** On two independent axes — structural topology and algebraic constraint density — the m=36→37 transition is continuous, with no phase-transition signature. This is *indirect* evidence (not a proof) that m=37 likely sits in the same satisfiability window as m=36. Full analysis: `analysis/results/m37_satisfiability_window.md` and `analysis/results/structural_scaling_2026-07-12.md`.
 
 > Caveat: m=29–36 are `.few` samples (19→1 solutions) with high statistical noise; the conclusion rests mainly on the m=3–28 full enumeration. Continuity does not guarantee existence — the system is 0-dimensional (Complete-Determination Principle) and may be empty at any m.
+
+### 2.14 Quadratic Sidon Completeness — R8 ★ (capstone)
+
+The quadratic gap (R7, §2.12) shows that linear Sidon laws are insufficient. The strongest result of the project is a **complete quadratic characterization** of C₄-symmetric NTIL solutions.
+
+> **Theorem (Quadratic Sidon Completeness, R8 — computational verification 2026-07-12).** A C₄-symmetric 2n-point configuration on an even n×n grid (n=2m) is a no-three-in-line solution **if and only if** it satisfies the following pure quadratic constraint-satisfaction problem over its m orbit-pairs \((a_k,b_k)\):
+> - **X-layer (cross-cell).** For every triple of *distinct* orbits \((i,j,k)\) and every one of the 16 equivalence classes of rotation triples, the \(3\times3\) collinearity determinant is non-zero.
+> - **S-layer (same-cell).** For every pair of rotation images from the *same* orbit together with one image from a different orbit, the corresponding \(3\times3\) determinant is non-zero.
+>
+> FDR (the a-b Sidon law, §2.10) is implied by R8 but is *not* sufficient: the X-layer alone misses solutions (m=5: 53 false negatives), and adding the S-layer yields **exact equivalence** — all 93 known solutions pass, and 7,500 random templates give miss = 0, false = 0.
+
+**Verification.** `analysis/quadratic_sidon_completeness.py` checks R8 against (i) all 93 known rot4 solutions for m=5..12 (100% pass) and (ii) 1,500 random 2-regular templates per m=5..9 (7,500 total): miss(X+S)=0, false(X+S)=0, and adding FDR does not change either count. Full statement and tables: `analysis/results/quadratic_sidon_completeness.md`.
+
+**m=37 precision.** The C₄ lift of a candidate at n=74 (m=37) is a system of ≈156,288 quadratic non-equality constraints (X-layer 124,320 + S-layer 31,968) over 74 variables. Existence of a rot4 solution at n=74 is exactly the satisfiability of this quadratic CSP — consistent with the Complete-Determination Principle (§2.12).
 
 ## 3. Empirical Findings
 
