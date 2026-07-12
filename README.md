@@ -36,7 +36,7 @@ This section collects every result that is **proven** (theorem or lemma with pro
 > 3. **Linear rigidity — FDR (§2.10).** A symmetry group that preserves slope-±1 lines forces the a-b Sidon law on its natural fundamental domain; orthogonal reflection (ort1) is the exact boundary where FDR fails.
 > 4. **Classification (§2.11).** The Sidon law asymptotically separates symmetric from generic configurations — a structural signature of symmetry.
 > 5. **The quadratic gap — R7 (§2.12).** Cross-quadrant collinearity is an *irreducible quadratic* condition; no finite set of linear Sidon constraints can capture it. The rot4 search space is fundamentally quadratic, not linear.
-> 6. **Quadratic completeness — R8 (§2.14, new).** rot4 NTIL is *exactly equivalent* to a pure quadratic constraint-satisfaction problem (X-layer cross-cell determinants + S-layer same-cell determinants). FDR is necessary but not sufficient.
+> 6. **Quadratic completeness — R8 (§2.14, THEOREM).** rot4 NTIL is *exactly equivalent* to a pure quadratic constraint-satisfaction problem (X-layer cross-cell determinants + S-layer same-cell determinants), proved by finite-geometry case analysis. FDR is necessary but not sufficient.
 > 7. **The m=37 window (§2.13).** Structural and algebraic scalings place m=37 inside the satisfiable regime — indirect evidence that a C₄ solution at n=74 exists.
 >
 > Supporting results (low-slope parity §2.5, distance-ring hypergraph §2.6, further rot4 theorems §2.7, container method §2.8, structural invariants §2.13) shore up this spine. The missing-center question that started the project is recorded in §3 as empirical background.
@@ -443,15 +443,19 @@ Two independent scaling analyses locate m=37 **inside** the satisfiable regime r
 
 The quadratic gap (R7, §2.12) shows that linear Sidon laws are insufficient. The strongest result of the project is a **complete quadratic characterization** of C₄-symmetric NTIL solutions.
 
-> **Theorem (Quadratic Sidon Completeness, R8 — computational verification 2026-07-12).** A C₄-symmetric 2n-point configuration on an even n×n grid (n=2m) is a no-three-in-line solution **if and only if** it satisfies the following pure quadratic constraint-satisfaction problem over its m orbit-pairs \((a_k,b_k)\):
-> - **X-layer (cross-cell).** For every triple of *distinct* orbits \((i,j,k)\) and every one of the 16 equivalence classes of rotation triples, the \(3\times3\) collinearity determinant is non-zero.
+> **Theorem (Quadratic Sidon Completeness, R8 — PROVED 2026-07-12, finite-geometry case analysis + computational verification).** A C₄-symmetric 2n-point configuration on an even n×n grid (n=2m) is a no-three-in-line solution **if and only if** it satisfies the following pure quadratic constraint-satisfaction problem over its m orbit-representatives (cells) in the fundamental quadrant:
+> - **X-layer (cross-cell).** For every triple of *distinct* orbits \((i,j,k)\) and every one of the 16 equivalence classes of rotation triples (the C₄ board-rotation reduction of the naïve 64), the \(3\times3\) collinearity determinant is non-zero.
 > - **S-layer (same-cell).** For every pair of rotation images from the *same* orbit together with one image from a different orbit, the corresponding \(3\times3\) determinant is non-zero.
 >
 > FDR (the a-b Sidon law, §2.10) is implied by R8 but is *not* sufficient: the X-layer alone misses solutions (m=5: 53 false negatives), and adding the S-layer yields **exact equivalence** — all 93 known solutions pass, and 7,500 random templates give miss = 0, false = 0.
 
+**Proof.** A finite-geometry case analysis partitions any collinear triple by its source orbits into exactly three cases — (A) three distinct orbits (X covers), (B) two images of one orbit + one of another (S covers), (C) three images of one orbit (geometrically impossible: a C₄ orbit has no three collinear points). (A),(B) are ruled out by (X),(S) and (C) never occurs, so (X)∧(S) ⇔ no-three-in-line. Full write-up: `analysis/results/r8_proof.md`.
+
 **Verification.** `analysis/quadratic_sidon_completeness.py` checks R8 against (i) all 93 known rot4 solutions for m=5..12 (100% pass) and (ii) 1,500 random 2-regular templates per m=5..9 (7,500 total): miss(X+S)=0, false(X+S)=0, and adding FDR does not change either count. Full statement and tables: `analysis/results/quadratic_sidon_completeness.md`.
 
-**m=37 precision.** The C₄ lift of a candidate at n=74 (m=37) is a system of ≈156,288 quadratic non-equality constraints (X-layer 124,320 + S-layer 31,968) over 74 variables. Existence of a rot4 solution at n=74 is exactly the satisfiability of this quadratic CSP — consistent with the Complete-Determination Principle (§2.12).
+**Solver.** `analysis/constraint_prop_solver.py` is the first engine to search in the *correct* (X+S) quadratic space (every earlier Z3/CP-SAT/SA/Sidon attempt used the insufficient linear space). It backtracks over an **m-subset** of the m×m fundamental quadrant with (X+S) forward-checking; Stage V proves it SOUND (never prunes a valid prefix) and recovers known solutions (guided in ≤ m nodes; blind randomized DFS for m=6,8), and Stage D confirms the 16-class X / 12-class S forms are exactly equivalent to the full 64/24 (847 configs, 0 mismatches).
+
+**m=37 precision.** The C₄ lift of a candidate at n=74 (m=37) is a system of **140,304** quadratic non-equality constraints over **1,369 binary selection variables** (choose an m-subset of the m×m quadrant — *not* a permutation matrix, and *not* "74 variables"): X-layer = C(37,3)×16 = 124,320; S-layer = 37×12×36 = 15,984. (Non-reduced full 64/24 count = 529,248; the C₄ reduction saves ≈3.77×.) Existence of a rot4 solution at n=74 is exactly the satisfiability of this quadratic CSP — consistent with the Complete-Determination Principle (§2.12). Minimal-count derivation: `analysis/results/r8_minimal_csp.md`. Status: the system is fully written down and the solver lives in its space, but satisfiability itself remains **OPEN** (Monte-Carlo finds no random hit; bounded backtracking characterises pruning strength but cannot complete at m=37 within budget).
 
 ## 3. Empirical Findings
 

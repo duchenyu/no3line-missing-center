@@ -1,7 +1,8 @@
 # R8 (candidate theorem): rot4 NTIL ⇔ Quadratic-Sidon CSP
 
 **Date:** 2026-07-12
-**Status:** computational proof (exhaustive on m=5..12 known solutions + 7500 random templates)
+**Status:** **THEOREM** — finite-geometry case analysis (see `r8_proof.md`) + computational verification
+(exhaustive on 93 known solutions m=5..12 + 7500 random templates, `miss(X+S)=0, false(X+S)=0`).
 **Prerequisite:** R7 (Quadratic Gap Theorem, proved 2026-07-12).
 
 ---
@@ -106,7 +107,7 @@ finds non-collinear.
 
 ---
 
-## 4. Theorem (R8, candidate)
+## 4. Theorem (R8) — PROVED
 
 > **Theorem (Quadratic-Sidon Completeness).**  A rot4 pairing
 > `{(a_i,b_i)}_{i=1..m}` is a no-three-in-line configuration **if and only if**
@@ -117,15 +118,28 @@ finds non-collinear.
 > Equivalently, rot4 NTIL is *exactly* a quadratic CSP over the m cell
 > variables (α_i,β_i) ∈ {1,…,m}².
 
-**Consequence for m=37.**  m=37 rot4 existence ⇔ the quadratic system with
-- variables: 37 cells × (α,β) = **74 integer variables** in {1,…,37}²
-- constraints (de-duplicated by C4 symmetry):
-  - X: C(37,3) × 16 equivalence classes = **124,320** quadratic inequalities
-  - S: 37 × 6 × 36 × 4 = **31,968** quadratic inequalities
-  - total ≈ **156,288** three-body quadratic inequalities, all required ≠ 0.
+**Proof.** Finite-geometry case analysis: any three collinear lifted points
+must come from (A) three distinct cells → caught by X, (B) two images of one
+cell + one of another → caught by S, or (C) three images of one cell — but a
+single C4 orbit contains no three collinear points (square vertices / axis
+cross). Cases A, B exhaust all real possibilities. Full proof:
+[`r8_proof.md`](./r8_proof.md). Computational cross-check: 93 known solutions
+all SAFE; 7500 random templates give `miss(X+S)=0, false(X+S)=0`.
 
-This sharpens the earlier "124,320 quadratic constraints" estimate (which
-captured only X) by adding the necessary S layer.
+**Consequence for m=37.**  m=37 rot4 existence ⇔ the quadratic system with
+- variables: **1369 binary selection variables** `x_{r,c} ∈ {0,1}` (Σ = 37),
+  i.e. choose an `m`-subset of the `m×m` fundamental quadrant (NOT a
+  permutation matrix — rows/cols may repeat; NOT "74 variables").
+- constraints (C4 board-rotation de-duplicated):
+  - X: C(37,3) × 16 equivalence classes = **124,320** quadratic inequalities
+  - S: 37 × 12 × 36 = **15,984** quadratic inequalities  (12 = 3·4 forms
+    per ordered `(double,single)` cell pair, after fixing one rotation)
+  - total minimal = **140,304** three-body quadratic inequalities, all ≠ 0.
+  (Non-reduced full 64/24 count would be 497,280 + 31,968 = 529,248; the C4
+  reduction saves ≈3.77×. See `r8_minimal_csp.md` for the derivation.)
+
+This replaces the earlier mixed estimate (124,320 + 31,968 ≈ 156,288, which
+accidentally combined a de-duplicated X with a *full* S).
 
 ---
 
@@ -157,11 +171,11 @@ uses only the 16 cross-form X layer is **incomplete** — it must include S.
 
 ## 7. Open problems / next steps
 
-1. **Algebraic proof of R8.**  The computational equivalence is strong
-   evidence but not a proof.  A formal proof would show that the 4m lifted
-   points can only be collinear in the two cases enumerated by X and S
-   (three distinct cells, or two images of one cell + one of another) — a
-   finite geometric case analysis under C4 symmetry.
+1. ~~**Algebraic proof of R8.**~~ **DONE (2026-07-12).** Finite-geometry case
+   analysis in [`r8_proof.md`](./r8_proof.md): the 4m lifted points can only be
+   collinear in the two cases enumerated by X and S (three distinct cells, or
+   two images of one cell + one of another); the third case (three images of
+   one cell) is impossible because a C4 orbit has no three collinear points.
 2. **Satisfiability of the m=37 system.**  With R8, m=37 existence is a
    concrete quadratic CSP.  Attack via (a) Gröbner/elimination on fixed
    combinatorial templates, or (b) constraint-propagation solver in the
