@@ -1550,25 +1550,45 @@ The repository also includes **RLE-format solution analysis** (`results/result_r
 - `e3_slope_stats.json` — Direction key multiset statistics (m=5..36)
 
 ## References
-1. **P. Erdős**, "On a problem of combinatorial geometry," *American Mathematical Monthly*, vol. 42, 1935, pp. 586–589. — The original formulation of the No-Three-In-Line problem.
+1. **H. E. Dudeney** (1917). "317. A puzzle with pawns." In *Amusements in Mathematics*. Edinburgh: Nelson, p. 94 (solution p. 222). — The original formulation of the No-Three-In-Line problem (the n=8 chessboard case; first posed in the *London Tribune*, 7 Nov 1906). *(Corrects an earlier misattribution of the "original formulation" to Erdős 1935.)*
 
-2. **R. K. Guy and P. A. Kelly**, "The No-Three-In-Line Problem," *Canadian Mathematical Bulletin*, vol. 11, 1968, pp. 527–531. — Early survey of known results.
+2. **K. F. Roth** (1951). "On a problem of Heilbronn." *Journal of the London Mathematical Society* 26(3): 198–204. — Contains Erdős's modular-parabola construction, giving f(n) ≥ n−o(n) when n is prime: the first non-trivial lower bound.
 
-3. **A. Flammenkamp**, "No-Three-In-Line Problem," [Website](https://wwwhomes.uni-bielefeld.de/achim/no3in/), 1997–2026. — The authoritative database of known solutions and configuration files. Data downloaded from `download/configurations/`.
+3. **R. K. Guy and P. A. Kelly** (1968). "The No-Three-In-Line Problem." *Canadian Mathematical Bulletin* 11: 527–531. — Classic survey; conjectured the c·n asymptotic upper bound (c ≈ π/√3 ≈ 1.814 after Ellmann's 2004 correction of the original heuristic).
 
-4. **M. J. H. Heule**, "$D(65)=D(67)=D(69)=D(70)=D(72)=2n$," unpublished, 2026. — SAT solver discovery of the n=72 record solution with C₄ symmetry. Reported on [Flammenkamp's website](https://wwwhomes.uni-bielefeld.de/achim/no3in/readme.html).
+4. **M. A. Adena, D. A. Holton, and P. A. Kelly** (1974). "Some thoughts on the no-three-in-line problem." In D. A. Holton (ed.), *Combinatorial Mathematics* (Proc. 2nd Australian Conf.), Lecture Notes in Mathematics 403, pp. 6–17. — Early structural advances (saturated subsets).
 
-5. **mvr/no-three-in-line**, "GPU-based exhaustive search for the No-Three-In-Line problem," [GitHub repository](https://github.com/mvr/no-three-in-line), 2024. — GPU enumeration of D(n) for n up to 19, with solution files in RLE format.
+5. **R. R. Hall, T. H. Jackson, A. Sudbery, and K. Wild** (1975). "Some advances in the no-three-in-line problem." *Journal of Combinatorial Theory, Series A* 18(3): 336–341. — Modular-hyperbola construction; best known lower bound f(n) ≥ 3n/2 − o(n) (unbeaten).
 
-6. **OEIS A000755**, "Maximal number of points on an n×n grid with no three collinear," [OEIS](https://oeis.org/A000755). — Known values of D(n).
+6. **A. Flammenkamp** (1992). "Progress in the no-three-in-line problem." *J. Combin. Theory Ser. A* 60(2): 305–311. — (1998). "Progress in the no-three-in-line problem, II." *J. Combin. Theory Ser. A* 81(1): 108–113. — Authoritative enumeration; exact 2n solutions pushed to n=52; D₄ symmetry classification (rot4/rot2/iden/dia1/dia2/ort1/ort2/rct4/full) used throughout this work. Also maintained at [wwwhomes.uni-bielefeld.de/achim/no3in/](https://wwwhomes.uni-bielefeld.de/achim/no3in/).
 
-7. **OEIS A000769**, "Number of solutions to the No-Three-In-Line problem on an n×n grid," [OEIS](https://oeis.org/A000769). — Solution counts.
+7. **M. J. H. Heule** (2026). "$D(65)=D(67)=D(69)=D(70)=D(72)=2n$" (unpublished). — SAT solver discovery of the n=72 record solution with C₄ symmetry. Reported on [Flammenkamp's website](https://wwwhomes.uni-bielefeld.de/achim/no3in/readme.html).
 
-8. **J. H. Conway and R. K. Guy**, *The Book of Numbers*, Springer, 1996. — Fermat's theorem on sums of two squares (used in the refined model).
+8. **mvr/no-three-in-line** (2024). "GPU-based exhaustive search for the No-Three-In-Line problem." [GitHub repository](https://github.com/mvr/no-three-in-line). — GPU enumeration of D(n) for n up to 19, with solution files in RLE format.
 
-9. **A. Pór and D. R. Wood**, "No-Three-in-Line-in-3D," *Algorithmica*, vol. 47, 2007, pp. 481–488 (originally in *Proc. GD 2004*, LNCS 3383, pp. 395–402). — Proved the 3D no-three-in-line maximum is Θ(n²) and established the vol(n,d,1) framework. The construction Vp = {(x, y, x²+y² mod p)} for p ≡ 3 (mod 4) is the foundation of our higher-dimensional analysis.
+9. **OEIS A000755** — "Maximal number of points on an n×n grid with no three collinear." [OEIS](https://oeis.org/A000755). — Known values of D(n).
 
-10. **T. Agama** (Theophilus Agama), "On the general no-three-in-line problem," arXiv:2106.15621v9, 2021–2026. — Extended the problem to arbitrary dimensions using the compression method, achieving Ω(n^{d-1}·d^{1/(2d)}) points in a d-dimensional n-grid. Implies vol(n,4,1) = O(n^{4/3}). **Caveat**: this paper has not appeared in a peer-reviewed venue as of 2026.
+10. **OEIS A000769** — "Number of solutions to the No-Three-In-Line problem on an n×n grid." [OEIS](https://oeis.org/A000769). — Solution counts.
+
+11. **J. H. Conway and R. K. Guy** (1996). *The Book of Numbers*. Springer. — Fermat's theorem on sums of two squares (used in the refined model).
+
+12. **A. Pór and D. R. Wood** (2007). "No-Three-in-Line-in-3D." *Algorithmica* 47(4): 481–488 (orig. *Proc. GD 2004*, LNCS 3383, pp. 395–402). — Proved the 3D maximum is Θ(n²) and established the vol(n,d,1) framework; the construction Vp = {(x, y, x²+y² mod p)} for p ≡ 3 (mod 4) underlies our higher-dimensional analysis.
+
+13. **T. Agama** (2021–2026). "On the general no-three-in-line problem." arXiv:2106.15621. — Extended the problem to arbitrary dimensions via the compression method, achieving Ω(n^{d-1}·d^{1/(2d)}) points. Implies vol(n,4,1) = O(n^{4/3}). **Caveat**: not peer-reviewed as of 2026.
+
+14. **D. Eppstein** (2018). *Forbidden Configurations in Discrete Geometry*. Springer. — ILP / backtracking formulations of NTIL and related lattice-point problems.
+
+15. **P. Brass, W. O. J. Moser, and J. Pach** (2005). *Research Problems in Discrete Geometry*, §10.1 "Packing lattice points in subspaces," pp. 417–421. Springer. — Call NTIL "one of the oldest and most extensively studied geometric questions concerning lattice points."
+
+16. **B. Green** (open problem). Conjectures the answer is ≈ 1.5n, i.e. that the Hall–Jackson–Sudbery–Wild modular-hyperbola bound is asymptotically optimal. — Documented in Brass–Moser–Pach and subsequent surveys.
+
+17. **B. Kovács, Z. L. Nagy, and D. R. Szabó** (2025). "Settling the no-(k+1)-in-line problem when k is not small." arXiv:2502.00176. — Proves the no-(k+1)-in-line answer is kn for k > C√(n log n) (major result on the generalization).
+
+18. **T. Prellberg, P. Ramanathan, M. Lewis, et al.** (2025). "Three Methods, One Problem: Classical and AI Approaches to No-Three-in-Line." arXiv:2512.11469. — First systematic ILP vs PatternBoost/PPO comparison; ILP optimal to 19×19.
+
+19. **T. Prellberg** (2026). CP-SAT symmetry-reduction enumeration of NTIL configurations. arXiv:2602.07751. — Methodological basis for large-n (incl. C₄) computational searches; directly relevant to our CP-SAT pipeline.
+
+20. **Z. Dong and Z. Xu** (2025). "Large grid subsets without many cospherical points." arXiv:2506.18113. — Improves the Erdős–Purdy lower bound; frames NTIL as a general lattice-subset problem.
 
 ## Acknowledgments
 The author gratefully acknowledges:
@@ -1576,6 +1596,7 @@ The author gratefully acknowledges:
 - **Achim Flammenkamp** for maintaining the comprehensive No-Three-In-Line database ([wwwhomes.uni-bielefeld.de/achim/no3in/](https://wwwhomes.uni-bielefeld.de/achim/no3in/)) spanning nearly three decades, and for making all configuration files publicly available.
 - **Marijn J. H. Heule** (CMU) for the discovery of the n=72 rot4 solution (2026-06-25), which provided key validation of the C₄ theorem at large scale.
 - **mvr** for the GPU-based exhaustive search of n≤19 and the RLE solution format used in [mvr/no-three-in-line](https://github.com/mvr/no-three-in-line).
+- **Thomas Prellberg** (Queen Mary University of London) for the CP-SAT symmetry-reduction enumeration of NTIL configurations (arXiv:2602.07751, 2026), which provides the methodological basis for our large-n (incl. C₄) computational search pipeline.
 - The developers of [Z3](https://github.com/Z3Prover/z3) (SMT solver) and [SCIP](https://www.scipopt.org/) (MIP solver), evaluated as candidate engines for the attempted n=74 C₄-solution search (§2.4).
 
 ## Citation
