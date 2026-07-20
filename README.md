@@ -1581,16 +1581,22 @@ hypergraph (§2.13, `conflict_hypergraph_params.json`).
 m=37 remains **[OPEN]**. What is established:
 - All m=3..36 have rot4 solutions (the m=23–26 "no solution" was a loader bug,
   since fixed).
-- From the four V=40 basins, no distance-≤12 exact repair exists (§7.6,
-  computational); the V=40 basins themselves, the directed-cell LNS closures, and the
-  matching-shell rigidity certificates are detailed in §7.11 (`ising_m37` arm).
+- The **best known** rot4 m=37 configuration is **V=20** (20 geometric bad triples,
+  5 C₄ orbits) — the one-loop root of the local barrier archive; six such factors are
+  each proven non-zero by an exact rational metric-LP certificate (`E_F ≥ 5`), see
+  §7.11.4 (`ising_m37` arm).
+- From the four **V=40** basins (a *separate, worse* family), no distance-≤12 exact
+  repair exists (§7.6, computational); those basins, the directed-cell LNS closures,
+  and the matching-shell rigidity certificates are detailed in §7.11.5–§7.11.7.
+  ⚠️ This closure is about a *worse* family than the V=20 record and does **not**
+  bound the V=20 neighbourhood.
 - Every direct search to date diverges at 160–300 collinear triples (§7.9).
 
 What is **not** established: whether a distance-≥13 escape (or a solution in a
 completely different basin) exists. The question *"does every even n admit 2n points
 with no three collinear?"* is **unresolved** for n=74 and in general.
 
-### 7.11 Ising / signed-NAE experimental search arm (`ising_m37`) — V=40 record & local rigidity [COMPUTATIONAL CERTIFICATE / OBSERVATION]
+### 7.11 Ising / signed-NAE experimental search arm (`ising_m37`) — V=20 best record, V=40 family & local rigidity [COMPUTATIONAL CERTIFICATE / OBSERVATION]
 
 > **Provenance & labelling.** A *second* read-only external agent directory
 > (`ising_m37`, independent of `even_n_existence`) is the *experimental* arm that
@@ -1631,12 +1637,35 @@ counts each geometric bad triple exactly once (true multiplicity of C(occupancy,
 Applying the correction dropped the best fixed-factor record from 64 → **48** bad
 triples.
 
-#### 7.11.4 V=40 record [COMPUTATIONAL CERTIFICATE]
-Repairing the 48-factor by *allowing one old defect to survive* ("max-cover-minus-1")
-yields a verified fixed factor with **40** geometric bad triples (10 C₄ defect orbits,
-0 diagonal defects, 0 slope ±1 defects). The `V=40` result is checked three
-independent ways: line-key enumeration, brute-force 148-point triple determinants, and
-a second exact CP-SAT solve (`OPTIMAL 40`). Best known rot4 m=37 record to date.
+#### 7.11.4 Best known record is V=20 — notation, correction & certificates [COMPUTATIONAL CERTIFICATE / OBSERVATION]
+**Notation.** In `ising_m37`, `V` = number of *geometric bad triples* = 4 × (number
+of C₄ defect orbits). So `V=40` = 40 triples = 10 orbits; `V=20` = 20 triples = 5
+orbits. Lower V = closer to a solution. (The source agent's own docs occasionally
+reuse `V` for the *orientation* count in other tables — always check the column
+header; here `V` is the geometric triple count, consistent with §7.11.5–§7.11.7.)
+
+**Correction (an earlier draft of this README was wrong).** The *best known* rot4
+m=37 record is **V=20** (20 bad triples, 5 C₄ orbits), the one-loop *root* of the
+local barrier archive — `research_directions §6.1` reports the archive minimum as
+one-loop **20**, no-loop/two-loop **28**. The source agent's 2026-07-17 "V=40 new
+record" write-up was *local* to the 48→40 defect-hitting thread and did **not**
+supersede the V=20 root; V=40 is a *separate, worse* family (next paragraph).
+
+**V=20 is a proven barrier, not a near-solution.** Six mutually-distant V=20 factors
+each carry an exact rational metric-LP certificate (`metric_lp_exact_certificates…
+2026-07-19`): every one has lower bound `E_F ≥ 5` (≥5 violated signed-NAE groups under
+*any* orientation), so none can be re-oriented to 0. The shortest certificate needs
+only 7 orientation variables / 7 groups / 4 triangle inequalities and is a hand-checkable
+proof that `E_F ≥ 1`. No local escape mechanism (beam, crossover, annealing,
+core-escape) has reached 36 from V=20 either.
+
+**V=40 family (verified but worse) [COMPUTATIONAL CERTIFICATE].** Repairing the
+48-factor by *allowing one old defect to survive* ("max-cover-minus-1") yields a
+verified fixed factor with **40** geometric bad triples (10 C₄ defect orbits, 0
+diagonal defects, 0 slope ±1 defects), checked three ways: line-key enumeration,
+brute-force 148-point triple determinants, second exact CP-SAT (`OPTIMAL 40`). Solid
+*local* record, but **not** the global best (V=20 is lower). Its four-basin structure
+and deep local closures are in §7.11.5–§7.11.7.
 
 #### 7.11.5 Four V=40 basins + 25-edge cold core [OBSERVATION]
 Exact archive now holds **four distinct V=40 factors** with cycle types `37`, `4+33`,
@@ -1682,11 +1711,14 @@ stagnation (local energy must first rise ≥16). FDR diagonal capacity alone dis
 from the four known basins.
 
 #### 7.11.8 Status of this arm
-`V=40` is a robust record (4 basins, 3 cycle types, three-way verified), and both the
-directed-cell LNS and matching-shell enumerations give genuine *local* lower-bound
-certificates. But none of it decides global existence: the four basins are local minima
-with no known zero nearby, and the only unclosed local window is `v40_02` at
-match-distance ≥7. The open questions mirror §7.6/§7.10 — **m=37 remains [OPEN]**.
+`V=40` is a robust *local* record (4 basins, 3 cycle types, three-way verified), and
+both the directed-cell LNS and matching-shell enumerations give genuine *local*
+lower-bound certificates around it. But it is **not** the global best — that is the
+V=20 one-loop root (§7.11.4). None of this decides global existence: the V=40 basins
+are local minima with no known zero nearby, and the only unclosed V=40 window is
+`v40_02` at match-distance ≥7. The deepest open question is instead whether the V=20
+neighbourhood (or a basin far from both) hides a 0/36 configuration. **m=37 remains
+[OPEN]**.
 
 ## Usage
 ### Build
