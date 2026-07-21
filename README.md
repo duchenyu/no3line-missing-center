@@ -1,41 +1,73 @@
-# No-Three-In-Line: Quadratic Rigidity of Symmetric Extremal Configurations
+# No-Three-In-Line: Symmetry Reductions, Exact Encodings, and the Open n=74 Case
 
-> **2026-07-13 Update — SIRH framework complete.** Today's work unified the project's four standalone results (FDR, R7, R8, R8-G) into the **Symmetry-Induced Rigidity Hierarchy (SIRH)**: a single umbrella theorem showing that extremal NTIL symmetry forces a layered algebraic rigidity (linear Sidon → quadratic CSP → 0-dimensional discrete solution space). The hierarchy is proven one-way (symmetry ⇒ rigidity, not ⇔).
+> **Research status (2026-07-21).** This repository is an AI-assisted computational
+> research notebook. It contains proved elementary lemmas, exact finite encodings,
+> machine-checked local certificates, conjectures, and superseded exploratory notes.
+> The labels in individual historical files are not by themselves proof status.
 >
-> **New results:**
-> - **R8-G** (§2.16): R8 generalized from C4 to **all six FDR groups** (C4/C2/D4/dia1/dia2/D2d) — resolves Hypothesis H.
-> - **SIRH** (§2.17): Four-part umbrella theorem (Part I FDR proven; Part II quadratic gap proven; Part III R8-G proven; Part IV reverse resolved negative).
-> - **T15** (§2.18): Cycle type refinement — 3-cycles provably baseframe-safe; 2-cycles not structurally forbidden (sampling effect, not algebraic ban).
-> - **Six computational directions** systematically evaluated (§3.16): none solve the open m=37 (n=74) C4 instance under current tools/theory.
-> - **Full verification sweep**: m=5/10/36 solutions re-verified (`verify_cells` PASS, 2-factor deg2 OK). Gating data shows `red_config_frac=1.0` for all m≥14.
+> **Current headline:** the existence of a C₄-symmetric solution for `n=74`
+> (`m=37`) remains **OPEN**. The earlier large random-UNSAT sweep based on the old
+> custom DPLL implementation is **withdrawn** because that implementation contained
+> a false-UNSAT bug. The trusted computational baseline is
+> [`analysis/even_n_existence_tools/validate_solver_report.md`](analysis/even_n_existence_tools/validate_solver_report.md).
 >
-> Core results merged into `analysis/results/` with memory and theory docs consolidated in `.workbuddy/memory/`.
+> The most reliable contributions currently are the C₄ orbit/centre observations,
+> the 2-regular pseudograph reduction, exact finite collinearity encodings, and
+> explicitly bounded local certificates such as the corrected `k≤14` V=20 audit.
+> FDR, the “Symmetry Signature” argument, the container claim, and the SIRH umbrella
+> are retained below as **provisional research frameworks** pending repaired proofs.
 
 > 🎯 **Interactive visualization available**: [**`visualization/overview.html`**](visualization/overview.html) — an interactive HTML guide to the missing-center concept, C₄ theorem, symmetry classes, empirical transitions, and key data. Open in any browser. (Screenshot below.)
 
 ![Overview](visualization/preview.png)
 
-An investigation of the **symmetry-induced rigidity** of extremal no-three-in-line configurations.
+An investigation of symmetry reductions and exact constraint formulations for
+extremal no-three-in-line configurations.
 
-How do rotation and reflection symmetries force a precise hierarchy of collinearity-excluding algebraic constraints? The hierarchy runs from linear Sidon laws on the fundamental domain (FDR, §2.10), through irreducible quadratic constraints (the quadratic gap, R7, §2.12), to a complete quadratic characterization of C₄-symmetric solutions (R8, §2.14).
+How can rotation and reflection symmetries reduce the collinearity constraints?
+The project studies linear necessary conditions on fundamental domains, determinant
+constraints for lifted point triples, and exact finite encodings of the remaining
+search problem. Several proposed hierarchy statements remain under proof audit.
 
-This has direct consequences for the open existence question at n=74 (m=37, §2.13).
+The main unresolved computational target is the C₄-symmetric existence question at
+`n=74` (`m=37`). Nothing in this repository currently proves either existence or
+non-existence.
 
 This work originates from the classical **no-three-in-line** problem (§The Problem); its extremal 2n-point solutions serve as the laboratory in which a broader theory of *symmetry-induced rigidity* is developed.
 
 ## The Problem
-Place **2n points** on an **n×n grid** such that no three are collinear. The no-three-in-line problem asks for the maximum number of points D(n) achievable. 2n-point solutions have been found for all n ≤ 52 (classical result), and for n = 65, 67, 69, 70, 72 via SAT solvers (Heule, 2026). n = 71 is the only n ≤ 72 with no known 2n-point solution — D(71) remains unresolved.
+Place **2n points** on an **n×n grid** such that no three are collinear. The
+no-three-in-line problem asks for the maximum number of points `D(n)` achievable.
+As of 2026-07-21, 2n-point configurations are known for every `n≤70` and also for
+`n=72`; `n=71` is the only unresolved value at most 72. The recent extension combines
+CP-SAT work by Thomas Prellberg through `n=60` with later computational discoveries
+recorded by Achim Flammenkamp, including Marijn Heule's SAT solutions at
+`n=65,67,69,70,72`.
+<!-- Background and attribution -->
 
-> **Prior work.** The classical NTIL problem originates with Dudeney (1917). Flammenkamp (1992–2026) established the symmetry classification (rot4, rot2, iden, dia1, dia2, ort1, ort2, rct4, full) and computed extensive solution counts. Prellberg (2026, arXiv:2602.07751) extended D(n)=2n to n≤60 using CP-SAT with a symmetry-reduced model on the fundamental domain H_n. Heule (2026) pushed to n=72 via SAT, finding the first n=70 (rot4) and n=72 (rot4) solutions. Cooper–Hyatt (*Des. Codes Cryptogr.* 93, 3135–3142, 2025) studied collinear triples in permutation graphs, noting that 2n-point sets partition into two permutations. The H_n fundamental domain and rotational symmetry reduction used in §2.2–2.4 follow Prellberg's formulation. Our contribution is *not* about finding more solutions; we uncover the *algebraic rigidity* that symmetry imposes, proving structural theorems (SIRH, FDR, R8-G, T15) that go beyond the computational record.
+> **Prior work.** The classical NTIL problem originates with Dudeney. Flammenkamp
+> established the symmetry classification used here and maintains the principal
+> database. Prellberg (2026, arXiv:2602.07751) extended `D(n)=2n` through `n=60`
+> using CP-SAT and symmetry reduction. Heule later found the `n=70` and `n=72`
+> rot4 solutions with SAT. Cooper–Hyatt studied collinear triples in permutation
+> graphs. This repository builds experimental reductions and encodings on top of
+> that literature; claims of novelty should be read narrowly and are not claims of
+> peer review.
+<!-- Repository scope -->
 
-**Our contribution.** Rather than searching for new solutions, we uncover the *algebraic rigidity* that symmetry imposes on extremal configurations.
+**Repository contribution.** The project collects symmetry reductions, exact
+encodings, verified local certificates, and failed approaches in one reproducible
+research record.
 
 The project began with a concrete question: for each known 2n-point solution, is the grid center ever a circumcenter of some triple? The answer — the C₄ theorem (§2.1) shows that C₄-symmetric solutions *never* miss the center — turned out to be the first rung of a ladder.
 
-Symmetry forces collinearity-excluding structure of increasing algebraic depth:
-- linear Sidon laws on the fundamental domain (FDR, §2.10);
-- irreducible quadratic constraints beyond any Sidon filter (the quadratic gap, R7, §2.12);
-- a *complete quadratic characterization* of all C₄-symmetric NTIL solutions (R8, §2.14).
+The working programme has three levels:
+- inexpensive linear necessary filters on a fundamental domain;
+- quadratic determinant constraints for lifted triples;
+- exact finite line-capacity encodings for computation.
+
+The first level is still under proof audit; the last level is an exact formulation,
+not a solution of the existence problem.
 
 The central open problem is whether a C₄-symmetric 2n-point solution exists at **n=74 (m=37)** (§2.13). The missing-center question is the historical entry point, not the destination.
 
@@ -50,24 +82,38 @@ d(x,y) = (2x-(n-1))^2 + (2y-(n-1))^2
 
 If three points have the same \(d\) value, they lie on a circle centered at \(C\), making \(C\) their circumcenter. Conversely, if \(C\) is the circumcenter of three points, those points are equidistant from \(C\) and thus share the same \(d\) value. **The equivalence is exact** — no floating-point approximation is involved.
 
-This is a novel invariant not previously studied in the literature. As an example application: the n=72 solution found by Marijn Heule (CMU, 2026-06-25) has C₄ (90° rotational) symmetry. By our C₄ theorem (proved below), any C₄-symmetric 2n-point solution on an even-n grid necessarily has the grid center as a circumcenter — so that particular solution is *not* a missing-center solution. (For odd-n grids no C₄-symmetric solution exists at all; missing-center solutions do appear there in other symmetry classes, as the data below show.)
+As an example application, the n=72 solution found by Marijn Heule
+(2026-06-25) has C₄ symmetry. Any complete C₄ orbit consists of four points
+equidistant from the grid centre, so that solution cannot be missing-centre.
+No literature-priority claim is made here.
 
-## 2. Proven Results
+## 2. Results, Exact Formulations, and Provisional Frameworks
 
-This section collects every result that is **proven** (theorem or lemma with proof), as opposed to the computational observations gathered in §3.
+This section mixes elementary proofs, exact encodings, computational checks, and
+provisional frameworks. Each item must be judged by its local status note; an old
+heading containing “theorem” is not sufficient evidence that the proof is closed.
 
 > **Main-axis spine.** The results below form a single narrative about *symmetry-induced rigidity*. Read §2 in this order:
 > 1. **Origin — missing center (§2.1).** C₄-symmetric solutions never miss the grid center (the center is always a circumcenter). This negative observation is the historical entry point, not the destination.
 > 2. **Reduction to graph theory (§2.2–§2.4).** C₄ solutions decompose into C₄-orbits ↔ a 2-regular graph on m=n/2 vertices; every row/column constraint becomes a degree-2 condition.
-> 3. **Linear rigidity — FDR (§2.10).** A symmetry group that preserves slope-±1 lines forces the a-b Sidon law on its natural fundamental domain; orthogonal reflection (ort1) is the exact boundary where FDR fails.
-> 4. **Classification (§2.11).** The Sidon law asymptotically separates symmetric from generic configurations — a structural signature of symmetry.
-> 5. **The quadratic gap — R7 (§2.12).** Cross-quadrant collinearity is an *irreducible quadratic* condition; no finite set of linear Sidon constraints can capture it. The rot4 search space is fundamentally quadratic, not linear.
-> 6. **Quadratic completeness — R8 (§2.14, THEOREM).** rot4 NTIL is *exactly equivalent* to a pure quadratic constraint-satisfaction problem (X-layer cross-cell determinants + S-layer same-cell determinants), proved by finite-geometry case analysis. FDR is necessary but not sufficient.
-> 7. **The m=37 window (§2.13).** Structural and algebraic scalings place m=37 inside the satisfiable regime — indirect evidence that a C₄ solution at n=74 exists.
+> 3. **Candidate linear layer — FDR (§2.10, proof incomplete).** The rot4
+> `count(d)+count(-d)≤2` condition is useful, but the published general proof has a
+> quantifier gap and the group boundary requires reformulation.
+> 4. **Candidate statistical signature (§2.11).** Empirical separation is retained;
+> the current asymptotic proof is incomplete.
+> 5. **Quadratic gap (§2.12, scope-limited).** Determinant constraints are genuinely
+> quadratic. The claim about “no finite linear filter” applies only after specifying
+> a uniform family and ambient domain; the tested Sidon families are insufficient.
+> 6. **Exact C₄ encoding — R8 (§2.14).** Partitioning lifted triples by source orbit
+> gives an exact finite encoding. This is an exact formulation, not an existence proof.
+> 7. **The m=37 window (§2.13).** Smooth extrapolation from smaller instances is
+> descriptive only and gives no reliable probability tilt toward SAT or UNSAT.
 >
 > Supporting results (low-slope parity §2.5, distance-ring hypergraph §2.6, further rot4 theorems §2.7, container method §2.8, structural invariants §2.13) shore up this spine. The missing-center question that started the project is recorded in §3 as empirical background.
 >
-> **Navigation:** every result is tagged Proven / Evidence / Conjecture / Revised in [`STATUS.md`](./STATUS.md); the two-layer rigidity synthesis (linear FDR → quadratic R8) is in `analysis/results/two_layer_rigidity.md`.
+> **Navigation:** [`STATUS.md`](./STATUS.md) is a historical navigation map and is
+> itself pending refresh. For current m=37 solver validity, prefer the dated
+> validation and retraction notes linked at the top of this README.
 
 ### 2.1 Theorem: C₄ Symmetry Implies Non-Missing-Center ✔ *(historical origin of the project)*
 
@@ -318,18 +364,24 @@ The following theorems were proven during an exhaustive analysis of the C₄-sym
 | 5 | 16,996 | 153 | 0.90% |
 | 6 | 11,215 | 8 | 0.07% |
 
-The survival rate drops sharply (≈13× from m=5 to m=6), indicating the C₄ lift is an extremely stringent filter. Extrapolating to m=37 gives an estimated survival probability on the order of 10^−15 or lower, consistent with the difficulty observed in the CP-SAT solver.
+The sampled survival rate drops sharply from m=5 to m=6, showing that the C₄ lift
+is a stringent filter in these two small cases. Two points are not a defensible
+extrapolation to m=37, so no large-m survival probability is inferred.
 
-### 2.8 Container Method Framework
+### 2.8 Container Method Framework *(provisional)*
 
 We model the no-three-in-line problem on a **danger hypergraph** \(H_n\):
 
 - **V** = \(n \times n\) grid points (\(n^2\) vertices)
 - **E** = all collinear triples (each line with \(k\) points contributes \(\binom{k}{3}\) edges)
 
-A 2n-point NTIL solution is exactly an independent set of size \(2n\) in \(H_n\). The container method (Saxton–Thomason, *Invent. Math.* 201(3), 925–992, 2015; Balogh–Morris–Samotij, *J. Amer. Math. Soc.* 28(3), 669–709, 2015) applies when the hypergraph is *smooth*: all codegrees are \(o(\Delta)\).
+A 2n-point NTIL solution is exactly an independent set of size \(2n\) in \(H_n\).
+Hypergraph-container theorems are a possible framework, but applying them requires
+checking their full degree hypotheses and deriving a quantitatively smaller
+container family; the measurements below do not by themselves establish that step.
 
-**Empirical measurements** (`analysis/academic_hn_params.py`):
+**Historical empirical measurements** (the original helper script is not currently
+present in this checkout):
 
 | n | |V| | max codegree | \(\Delta\) | \(\Delta / n^3\) | codeg / \(n\) |
 |---|---|---|---|---|---|---|
@@ -340,13 +392,18 @@ A 2n-point NTIL solution is exactly an independent set of size \(2n\) in \(H_n\)
 **Key findings**:
 - **max codegree = n−2 exactly** (the line through any two grid points contains at most n−2 other points)
 - \(\Delta = O(n^3)\) with coefficient ≈ 0.1 (decreasing with n)
-- codegree / \(\sqrt{\Delta} \to 0\) → \(H_n\) satisfies the (3, \(\Delta\))-smoothness condition for the container method
+- the sampled codegree-to-degree ratios motivate a container calculation, but do
+  not constitute one
 
-**Theorem (Container Method for NTIL)**. The set of all 2n-point NTIL configurations is contained in at most \(\exp(O(n))\) *high-minimum-degree containers* — each container is a subset of \(V\) where every vertex participates in relatively few hyperedges, implying that all surviving configurations are *highly structured*.
+**Open task.** Derive a valid container statement, with explicit hypotheses and
+container-size/edge-count bounds, for this particular hypergraph. The earlier
+`\exp(O(n))` and “highly structured” conclusion is withdrawn until that
+derivation is supplied.
 
-This reframes the existence problem from global constraint satisfaction to a local structural classification. It also opens a path to proving that asymmetric (iden) configurations are exponentially rare relative to symmetric ones — see §2.10 (FDR) and §2.11 (Symmetry Signature Theorem).
+If completed, such a calculation could help classify the search space, but it does
+not currently imply symmetry or rarity of asymmetric configurations.
 
-**Script**: `analysis/academic_hn_params.py`
+**Status**: framework only; proof and reproducible measurement script required.
 
 ### 2.9 The Intercept–Sidon Law (Th-56)
 
@@ -361,26 +418,39 @@ a = 2(m-1-x)-1,\quad b = 2(m-1-y)-1 \quad\text{(odd numbers $1,3,\dots,2m-1$)}
 - **4-form** (\(\{a-b,\,a+b\}\)): each value appears \(\le 2\) times (count(\(d\)) + count(\(-d\)) \(\le 2\)).
 - **8-form** (6 additional linear combinations: \(2a-b,\,a-2b,\,2a+b,\,a+2b,\,3a-b,\,a-3b\)): also satisfied.
 
-**Scale verification** (`analysis/bridge_empirical_v2.py`):
+**Historical scale measurements** (the original scripts are not currently present
+in this checkout):
 - **rot4 fundamental cells**: 4-form = **100%**, 8-form = **100%** across all cached solutions (n=6..72).
 - **Random m-cell baseline** (no NTIL constraint): 4-form pass rate decays rapidly (m=5: 45.6% → m=19: 1.1%), confirming the law is a *genuine structural constraint*, not a generic property.
 - **Important**: this law applies to the **m fundamental cells** (one per C₄ orbit), NOT to the raw \(2n\) row-pair representation of the full grid. An earlier version (v1) that tested raw row-pairs produced spurious 0% pass rates — this was a bug, not a contradiction.
 
-**Scripts**: `analysis/bridge_empirical_v2.py`, `analysis/binding_form_baseline.py`
+**Status**: regenerate before citing these percentages as reproducible evidence.
 
-### 2.10 Fundamental Domain Rigidity (FDR Theorem) ★
+### 2.10 Fundamental Domain Rigidity (FDR) — proof audit open
 
-The FDR theorem unifies Th-56 and the symmetry-class Sidon observations into a single geometric principle:
+The proposed FDR statement attempts to unify Th-56 and the observed
+symmetry-class Sidon conditions. The current general proof is **not closed**.
 
-> **Theorem (FDR).** Let \(G \le D_4\) be the symmetry group of an NTIL configuration. If \(G\) contains **only rotations or diagonal reflections** (i.e., it preserves the set of slope-±1 lines), then the natural geometric fundamental domain \(F_G\) (obtained by picking one representative per \(G\)-orbit) satisfies:
+> **Provisional FDR statement.** Let \(G \le D_4\) be the symmetry group of an NTIL
+> configuration and let \(F_G\) be a specified orbit transversal. Under suitable
+> hypotheses on how \(G\) pairs the two diagonal line families, one expects a bound
+> of the form
 > \[
-> \text{Every slope-+1 line in } F_G \text{ contains at most 1 point}
+> \operatorname{count}(d)+\operatorname{count}(-d)\le 2.
 > \]
-> which, under the standard (a,b) parametrisation, is equivalent to the **a-b Sidon law**: count(\(d\)) + count(\(-d\)) \(\le 2\).
+> The precise subgroup and fundamental-domain conditions still need a corrected
+> proof.
 
-**Proof sketch**: Each \(G\)-orbit pairs a point on line \(x-y = d\) with one on \(x-y = -d\). The natural fundamental domain selects exactly one of each pair, so the slope-+1 line occupancy of \(F_G\) is at most 1. ∎ (Full proof: `analysis/results/fdr_formal_proof.md`)
+**Proof gap.** The previous argument showed only that one orbit contributes at most
+one representative to a fixed line. It then incorrectly inferred that all distinct
+orbits together contribute at most one representative. That quantifier step is
+invalid. In addition, “preserves the slope-±1 family” must distinguish preserving
+the union from preserving each family separately. See
+[`analysis/results/fdr_theorem.md`](analysis/results/fdr_theorem.md) for the
+historical proof under repair.
 
-**Empirical validation across all symmetry types** (`analysis/natural_fd_laws.py`):
+**Historical empirical table** (the referenced `natural_fd_laws.py` script is
+not currently present and the table should be independently regenerated):
 
 | Class | True \(|G|\) | Natural \(F_G\) | a-b ≤ 2% | Geometry |
 |---|---|---|---|---|
@@ -393,22 +463,30 @@ The FDR theorem unifies Th-56 and the symmetry-class Sidon observations into a s
 | **ort1** | 2 (orth.) | Left half-plane \(x&lt;m\) | **0%** | **Orthogonal reflection *exchanges* slope lines** |
 | iden | 1 (trivial) | None | **0%** | No reduction |
 
-**The ort1 case is the precise boundary of FDR**, not a counterexample: orthogonal reflection swaps slope-+1 and slope−1 lines, so the fundamental-domain argument fails. This exact boundary confirms FDR's geometric character.
+The `ort1` data suggest a boundary for this particular coordinate statistic,
+but do not prove that the proposed group-theoretic boundary is exact.
 
-**Corollary (Symmetry → Sidon)**. Every NTIL configuration whose symmetry group \(G\) preserves the slope-±1 line set satisfies the a-b Sidon law on its natural fundamental domain. Conversely, the Sidon law on a geometrically natural domain is a *structural signature* of the corresponding symmetry — there is no "universal" Sidon law across all symmetry classes.
+**Current status.** The rot4 diagonal-capacity condition remains a useful necessary
+filter. Its uniform extension to all listed groups is a conjectural framework until
+the orbit-transversal proof is repaired.
 
-**Scripts**: `analysis/stabilizer_sidon.py`, `analysis/fd_domain_laws.py`, `analysis/verify_slope_lines.py`, `analysis/natural_fd_laws.py`
-**Documents**: `analysis/results/fundamental_domain_rigidity.md`, `analysis/results/fdr_formal_proof.md`
+**Document**: [`analysis/results/fdr_theorem.md`](analysis/results/fdr_theorem.md)
 
-### 2.11 Symmetry Signature Theorem
+### 2.11 Symmetry Signature Conjecture
 
 Let \(E_m\) be the event that a **random** set of \(m\) cells in an \(m \times m\) grid satisfies the 4-form intercept law.
 
-> **Theorem (Symmetry Signature)**. \(\mathbb{P}(E_m) \to 0\) as \(m \to \infty\). Every NTIL configuration with a quadrant-aligned fundamental domain satisfies \(E_m\) with probability 1 (by Th-56 and FDR).
+> **Conjecture (Symmetry Signature).** \(\mathbb{P}(E_m) \to 0\) as
+> \(m \to \infty\) for the stated random model. The proposed implication for
+> symmetric NTIL configurations is conditional on a corrected FDR statement.
 
-**Proof** (generic side). Partition the \(m^2\) cells into \(m\) disjoint slope-+1 diagonals. Middle diagonals contain \(\Theta(m)\) cells each. Choose \(m\) cells uniformly without replacement. By a multivariate-hypergeometric + Chebyshev argument, the expected number of diagonals with 0 or 1 cells (the only safe configurations) tends to 0. ∎
+**Proof status.** The earlier proof incorrectly claimed that the expected number of
+diagonals with occupancy 0 or 1 tends to zero. A valid proof would instead need to
+control collision counts (for example by Poisson approximation, Janson-type bounds,
+or a second-moment calculation). No such proof is supplied here.
 
-**Empirical support** (`analysis/per_n_signature.py`):
+**Historical empirical support** (the original `per_n_signature.py` script
+is not currently present and these percentages should be regenerated):
 
 | m | rot4 pass rate | iden pass rate |
 |---|---|---|
@@ -418,21 +496,32 @@ Let \(E_m\) be the event that a **random** set of \(m\) cells in an \(m \times m
 | 10 | 100% | 21% |
 | 19 | 100% | ~0% |
 
-The iden false-positive rate decays with m, matching the random baseline. This confirms that the 4-form law is a **near-perfect classifier** for quadrant-aligned symmetry at large n.
+The sampled iden pass rate decreases with m. This is suggestive but does not by
+itself establish an asymptotically near-perfect classifier.
 
-**Document**: `analysis/results/symmetry_signature_theorem.md`
+**Status**: empirical observation plus open asymptotic proof.
 
 ### 2.12 The Quadratic Gap — Why Sidon Is Not Enough
 
 The Intercept–Sidon law (Th-56) is a **linear** constraint on the pairing variables \((a,b)\): it limits the occupancy of each linear combination \(p a \pm q b\). However, the C₄ lift's full NTIL condition requires avoiding **cross-quadrant collinearity** — three lifted points from three different C₄ orbits and three different quadrants forming a line. The algebraic form of this condition is:
 
-> **Theorem (Quadratic Gap) — PROVED (R7, 2026-07-12).** The cross-quadrant collinearity determinant for rotation pattern (0,1,2) expands to:
+> **Quadratic Gap calculation (R7; global scope under audit).** The
+> cross-quadrant collinearity determinant for rotation pattern (0,1,2) expands to:
 > \[
 > \det = (\beta_2+\alpha_1-1)(\beta_3+\beta_1+m-2) - (\alpha_3+\alpha_1+m-2)(\beta_1-\alpha_2)
 > \]
-> where \(\alpha_i = (a_i+1)/2,\ \beta_i = (b_i+1)/2\). This contains **product terms** \(\alpha_i\beta_j\), \(\alpha_i\alpha_j\), \(\beta_i\beta_j\) — making it a genuine **quadratic** condition. **Any finite set of linear Sidon-type constraints is insufficient** to capture it.
+> where \(\alpha_i = (a_i+1)/2,\ \beta_i = (b_i+1)/2\). This contains
+> product terms and is a genuine quadratic polynomial. The tested finite Sidon
+> families do not capture all such collinearities.
 >
-> **Rigorous computational-algebra proof (R7).** The 64 rotation triples split into **16 distinct equivalence classes** of collinearity determinants. A sympy `factor_list` computation (`analysis/prove_quadratic_gap.py`) confirms **all 16 are genuinely irreducible quadratics** over ℚ(m) — the collinearity condition is intrinsically 2nd-order, not merely "contains a product". A geometric argument then proves the gap: an irreducible degree-2 hypersurface \(V(Q_k)\) cannot be covered by a finite union of degree-1 hyperplanes (else it would equal one, forcing deg 2 = deg 1 — contradiction), so **no finite linear Sidon filter can force cross-quadrant non-collinearity**. This is certified by an explicit integer witness at m=6: cells \((1,1),(2,3),(4,4)\) are collinear under rotation triple \((0,0,3)\) while all 15 pairwise linear Sidon forms are non-zero. Full statement: `analysis/results/quadratic_gap_theorem.md`.
+> **Verified algebraic content.** The 64 rotation triples reduce to 16 determinant
+> forms, and the SymPy calculation in `analysis/prove_quadratic_gap.py`
+> reports them irreducible over the stated symbolic coefficient field. The explicit
+> m=6 witness also shows that the 15 tested pairwise Sidon forms are insufficient.
+> The stronger phrase “no finite linear filter” requires a quantified, uniform
+> statement over an infinite ambient domain; it is not valid as written for an
+> arbitrary fixed finite grid, where finite enumeration is always possible. See
+> `analysis/results/quadratic_gap_theorem.md`.
 
 **Empirical evidence** (`analysis/characterize_x.py`):
 
@@ -469,9 +558,12 @@ This explains why 55+ search methods (Z3, CP-SAT, SA, DFS, etc.) all failed for 
 
 **Document**: `analysis/results/quadratic_complete_determination.md`
 
-### 2.13 Structural Invariants & the m=37 Satisfiability Window
+### 2.13 Structural Invariants & the Open m=37 Instance
 
-Two independent scaling analyses locate m=37 **inside** the satisfiable regime rather than at a phase-transition cliff. Full enumeration covers m=3–28 (Flammenkamp `.mvr` + plain); m=29–36 are `.few` samples. Script: `analysis/structural_invariants_scaling.py`.
+Two scaling analyses compare m=37 with smaller known instances. They describe
+continuity of selected statistics, but **cannot locate m=37 inside a satisfiable
+regime**. Full enumeration covers m=3–28 in the data used here; m=29–36 are sparse
+`.few` samples. Script: `analysis/structural_invariants_scaling.py`.
 
 **Structural invariants (pairing-graph source/sink ratio, cycle structure).**
 - **Source ratio is constant ≈ 0.26.** Over the full-enumeration band m=7–28 the ratio of source-vertices (odd numbers appearing as `a` twice) to m is stable at mean **0.2647**, σ < 0.005 — an intrinsic property of rot4 solutions, not an artifact. Extrapolated to m=37: ≈ 10 sources, 10 sinks, 17 balanced.
@@ -480,28 +572,38 @@ Two independent scaling analyses locate m=37 **inside** the satisfiable regime r
 
 **Quadratic constraint density (`analysis/measure_forbidden_lines.py`).** Lines-per-position ratio grows monotonically but extremely gently: m=5 → 3.8×, m=28 → 7.2×, m=36 → **7.34×**, m=37 (extrapolated) → **7.36×** (+0.3%). The density does **not** cross any steep threshold at m=37.
 
-**Conclusion.** On two independent axes — structural topology and algebraic constraint density — the m=36→37 transition is continuous, with no phase-transition signature. This is *indirect* evidence (not a proof) that m=37 likely sits in the same satisfiability window as m=36. Full analysis: `analysis/results/m37_satisfiability_window.md` and `analysis/results/structural_scaling_2026-07-12.md`.
+**Conclusion.** The selected observables do not show a sharp m=36→37 transition.
+That absence is compatible with either an extremely sparse solution set or an empty
+one and provides no reliable SAT/UNSAT probability tilt. Historical analyses:
+`analysis/results/m37_satisfiability_window.md` and
+`analysis/results/structural_scaling_2026-07-12.md`.
 
-> Caveat: m=29–36 are `.few` samples (19→1 solutions) with high statistical noise; the conclusion rests mainly on the m=3–28 full enumeration. Continuity does not guarantee existence — the system is 0-dimensional (Complete-Determination Principle) and may be empty at any m.
+> Caveat: m=29–36 are `.few` samples (19→1 solutions) with high statistical
+> noise. Continuity of selected statistics does not guarantee existence; a finite
+> Boolean constraint system can simply be empty.
 
-**SDP-based evidence (2026-07-16, `analysis/results/route3_sdp_report.md`).** The direction-signing subproblem (2-factor fixed → NAE assignment) was mapped to a MAX-CUT SDP (GW relaxation), yielding a *computational* lower bound on the minimum number of violated collinearity constraints for any given 2-factor:
-- **m=5**: SDP dual certifies ≥ 73 violations (all 73 solutions correctly flagged, 0 false positives)
-- **m=6**: SDP certifies ≥ 388 violations (100% recall on known solutions)
-- **m=37 (20 random 2-factors)**: all 20 have SDP lower bound ≥ **45.5** — each 2-factor inevitably produces ≥ 46 collinear triples regardless of how directions are assigned. This is a *sufficient* certification for each tested 2-factor: the 20 sampled configurations are individually unredeemable.
-- **Strengthening via triangle inequalities** (cut-polytope + triangle SDP): a specific 408-edge 2-factor is certified to need ≥ **16** violations (exact integer bound 16, no numerical rounding ambiguity). Another with 448 edges requires ≥ **17**.
-- **No universal inequality found**: regression of SDP lower bound vs 2-factor edge count yields R² = 0.595 — too weak for a general lower-bound formula. The SDP route certifies individual configurations but does not prove m=37 impossibility.
+**SDP route — withdrawn pending re-audit.** The previous summary mixed the SDP
+objective with the number of geometric collinear triples and even described
+408/448-“edge” 2-factors, although a 37-vertex 2-factor has 37 edges. Its numerical
+claims are therefore not used as evidence here. The route may be restored only
+after the relaxation objective, dual bound, rounding direction, and independently
+checked fixed-factor instances are documented consistently.
 
-**Key boundary**: the SDP evidence does **not** prove m=37 has no solution — it only shows the sampled 2-factors are all unredeemable, a necessary condition for a global impossibility argument that has not been established.
+### 2.14 Exact C₄ Collinearity Encoding — R8
 
-### 2.14 Quadratic Sidon Completeness — R8 ★ (capstone)
+The determinant calculation shows why the tested linear Sidon laws are
+insufficient. The following orbit-triple partition gives an exact finite encoding
+of C₄-symmetric NTIL candidates.
 
-The quadratic gap (R7, §2.12) shows that linear Sidon laws are insufficient. The strongest result of the project is a **complete quadratic characterization** of C₄-symmetric NTIL solutions.
-
-> **Theorem (Quadratic Sidon Completeness, R8 — PROVED 2026-07-12, finite-geometry case analysis + computational verification).** A C₄-symmetric 2n-point configuration on an even n×n grid (n=2m) is a no-three-in-line solution **if and only if** it satisfies the following pure quadratic constraint-satisfaction problem over its m orbit-representatives (cells) in the fundamental quadrant:
+> **Exact encoding (R8).** A C₄-symmetric 2n-point configuration on an even
+> n×n grid (n=2m) is a no-three-in-line solution **if and only if** all lifted
+> triples covered by the following two families are non-collinear:
 > - **X-layer (cross-cell).** For every triple of *distinct* orbits \((i,j,k)\) and every one of the 16 equivalence classes of rotation triples (the C₄ board-rotation reduction of the naïve 64), the \(3\times3\) collinearity determinant is non-zero.
 > - **S-layer (same-cell).** For every pair of rotation images from the *same* orbit together with one image from a different orbit, the corresponding \(3\times3\) determinant is non-zero.
 >
-> FDR (the a-b Sidon law, §2.10) is implied by R8 but is *not* sufficient: the X-layer alone misses solutions (m=5: 53 false negatives), and adding the S-layer yields **exact equivalence** — all 93 known solutions pass, and 7,500 random templates give miss = 0, false = 0.
+> The tested diagonal-capacity condition is necessary but not sufficient. The
+> X-layer alone admits invalid candidates (m=5: 53 **false positives**, not false
+> negatives); adding the S-layer gives the exact triple partition described below.
 
 **Proof.** A finite-geometry case analysis partitions any collinear triple by its source orbits into exactly three cases — (A) three distinct orbits (X covers), (B) two images of one orbit + one of another (S covers), (C) three images of one orbit (geometrically impossible: a C₄ orbit has no three collinear points). (A),(B) are ruled out by (X),(S) and (C) never occurs, so (X)∧(S) ⇔ no-three-in-line. Full write-up: `analysis/results/r8_proof.md`.
 
@@ -509,7 +611,19 @@ The quadratic gap (R7, §2.12) shows that linear Sidon laws are insufficient. Th
 
 **Solver.** `analysis/constraint_prop_solver.py` is the first engine to search in the *correct* (X+S) quadratic space (every earlier Z3/CP-SAT/SA/Sidon attempt used the insufficient linear space). It backtracks over an **m-subset** of the m×m fundamental quadrant with (X+S) forward-checking; Stage V proves it SOUND (never prunes a valid prefix) and recovers known solutions (guided in ≤ m nodes; blind randomized DFS for m=6,8), and Stage D confirms the 16-class X / 12-class S forms are exactly equivalent to the full 64/24 (847 configs, 0 mismatches).
 
-**m=37 precision.** The C₄ lift of a candidate at n=74 (m=37) is a system of **140,304** quadratic non-equality constraints over **1,369 binary selection variables** (choose an m-subset of the m×m quadrant — *not* a permutation matrix, and *not* "74 variables"): X-layer = C(37,3)×16 = 124,320; S-layer = 37×12×36 = 15,984. (Non-reduced full 64/24 count = 529,248; the C₄ reduction saves ≈3.77×.) Existence of a rot4 solution at n=74 is exactly the satisfiability of this quadratic CSP — consistent with the Complete-Determination Principle (§2.12). Minimal-count derivation: `analysis/results/r8_minimal_csp.md`. Status: the system is fully written down and the solver lives in its space, but satisfiability itself remains **OPEN** (Monte-Carlo finds no random hit; bounded backtracking characterises pruning strength but cannot complete at m=37 within budget).
+**m=37 model distinction.** Two exact formulations must not be conflated:
+
+- In a **37-orbit coordinate formulation**, the 37 chosen representatives are the
+  objects, so the reduced formal triple-family count is
+  `C(37,3)×16 + 37×12×36 = 140,304`.
+- In a **1,369-variable Boolean selection formulation**, every cell of the 37×37
+  quadrant is a variable and the forbidden cell-pair/triple instances must be
+  generated over that full universe. The resulting conflict hypergraph contains
+  tens of millions of ternary conflicts (see §3.15), not 140,304 constraints.
+
+These encodings express the same geometry in different variable spaces. Neither
+settles satisfiability; m=37 remains **OPEN**. See
+`analysis/results/r8_minimal_csp.md`.
 
 ### 2.15 Costas Array Symmetry Classification — FDR-transfer (NEW 2026-07-13) ★
 
@@ -544,47 +658,66 @@ Independent corroboration: dedicated CP-SAT sweep **INFEASIBLE** at n=4,8,12,16,
 
 ---
 
-### 2.16 R8-G: Quadratic Completeness for All FDR Groups ★ (NEW 2026-07-13)
-**Status: THEOREM — resolves Hypothesis H | Under: SIRH Part III**
+### 2.16 R8-G: Generic Symmetry-Reduced Line Encoding
+**Status: exact encoding; earlier “resolves Hypothesis H” wording withdrawn**
 
-R8 generalized from C4 to **all six** fundamental-domain-rigidity (FDR) groups: C4, C2, D4, dia1, dia2, D2d. **Statement** (see `analysis/results/r8_generalized.md`):
+For a fixed symmetry group, orbit representatives can be used to write an exact
+weighted line-capacity model. The construction was tested on the six groups
+C4, C2, D4, dia1, dia2, and D2d. See
+`analysis/results/r8_generalized.md`.
 
 > A G-symmetric configuration is NTIL iff its fundamental-domain selection `sel: F_G → {0,1}` satisfies the **per-line weighted at-most-2 constraint family**
 > ```
 > ∀ board lines L: Σ_{c∈F_G} w_{L,c}·sel[c] ≤ 2, where w_{L,c} = |{g·c : g∈G} ∩ L|
 > ```
-> which is exactly a **finite quadratic CSP** (2×2 determinant ≠ 0 over orbit triples in F_G).
+> Collinear lifted triples may equivalently be detected by 2×2 determinants.
 
-**Proof**: Trivial from NTIL definition — soundness (⇒) and completeness (⇐) are definitional; quadratic equivalence via determinant form. An independent algebraic proof (`analysis/results/r8g_algebraic_proof.md`) derives the same result from polynomial algebra without computational case analysis, confirming the determinant → at-most-2 equivalence for all m. **Computational validation**: 45/45 instances verify=True across all six groups (m=2..12), direct solves confirm reachability for reflection/Klein groups. Closes Hypothesis H. See `analysis/results/r8_generalized.md`.
+**Interpretation.** Soundness and completeness of the per-line model are
+definitional: “every line has occupancy at most 2” is exactly NTIL. The determinant
+form is a useful implementation and symmetry reduction, but this equivalence alone
+is not an existence theorem or a new rigidity theorem. In fact, the same weighted
+line construction works for any finite group action; the six-group restriction came
+from the provisional FDR hierarchy, not from exactness of the encoding.
 
 ---
 
-### 2.17 SIRH — Symmetry-Induced Rigidity Hierarchy ★ (NEW 2026-07-13)
-**Status: Umbrella theorem — Parts I-III proven, Part IV resolved negative | Original synthesis (no direct prior publication found)**
+### 2.17 SIRH — Provisional Research Programme
+**Status: conceptual synthesis; not a closed umbrella theorem**
 
-The four standalone results (FDR, R7, R8, R8-G) are **three depths of one phenomenon**: a symmetry group acting on a grid induces a *hierarchy* of rigidity constraints, starting linear (and forced by the group) and becoming quadratic (and exact, by geometry). *(Prior work note: the individual FDR/R7/R8 pieces build on the known NTIL symmetry analysis of Flammenkamp and Prellberg; the unified 4-part hierarchy, the group-independent quadratic-gap lemma, R8-G across all six FDR groups, and the reverse-negative resolution are the new synthesis.)*
+SIRH is a useful organisational picture: symmetry suggests inexpensive linear
+filters, while full collinearity is expressed by determinant constraints. It is not
+currently a theorem because the uniform FDR proof is incomplete, the global R7
+quantifiers need narrowing, and R8-G is an exact encoding by definition.
 
 | Layer | Result | Content | Status |
 |---|---|---|---|
-| **Part I — Linear** | FDR | G preserves slope±1 ⇒ a−b Sidon on F_G | **Proven** |
-| **Part II — Quadratic gap** | R7 (group-independent) | FDR sees only slope±1; other lines need quadratic det≠0 | **Proven** |
-| **Part III — Quadratic complete** | R8-G | G-symmetric NTIL ⇔ finite quadratic CSP on F_G | **Proven** (all 6 FDR groups) |
-| **Part IV — Reverse** | Sidon ⇏ symmetry | Sidon/quadratic signature is **one-way necessary only** | **Resolved negative** |
+| **Part I — Linear** | FDR | candidate necessary Sidon filters | **Proof incomplete** |
+| **Part II — Quadratic gap** | R7 | tested linear families miss determinant conflicts | **Scope-limited** |
+| **Part III — Exact encoding** | R8/R8-G | weighted line capacities / determinants | **Exact formulation** |
+| **Part IV — Reverse** | Sidon ⇏ symmetry | filters do not characterize symmetry | **Empirical + elementary counterexamples** |
 
-**Formal statement (the four-part theorem).** Let `C` be a `2n`-point NTIL extremal configuration, `G = Stab(C) ≤ D₄`, `F_G ⊂ C` its natural fundamental domain (one representative per `G`-orbit).
+The following bullets record the intended programme, not a four-part theorem.
 
-- **Part I — Linear layer (FDR, proven).** If `G` preserves the slope±1 line family (equivalently `G` contains no orthogonal reflection `g₄,g₅`), then on `F_G` the values `a−b = −2(x−y)` satisfy the Sidon bound `count(d)+count(−d) ≤ 2` for every `d = x−y`. *Necessary only* — verified 100% for rot4/rot2/rct4/full/dia2/dia1 and 0% for ort1/iden (the exact slope±1-preserving boundary, §2.10).
-- **Part II — Quadratic gap (R7, proven, group-independent).** Cross-orbit collinearity is a 2×2 determinant = 0, an irreducible *quadratic* condition. Because the a−b Sidon law depends only on `x−y`, no finite family of linear Sidon conditions can forbid a no-three-in-line triple on a non-slope±1 line.
+- **Part I — candidate linear layer.** Repair the subgroup/orbit-transversal proof
+  and regenerate the empirical table from checked scripts.
+- **Part II — quantified quadratic gap.** State exactly which uniform linear-form
+  families are ruled out and over which ambient domain.
 
 Strict *insufficiency* is constructively witnessed:
   - for C4 (Sidon-8 pairings → 0% C4-lift survival);
   - for rot2 (random half-board Sidon sets contain a no-three-in-line triple after the 180° lift, at every tested order n∈{8,10,12,14,16}).
-- **Part III — Quadratic completeness (R8-G, proven, all six FDR groups).** A `G`-symmetric configuration is NTIL **iff** its fundamental-domain selection `sel: F_G → {0,1}` satisfies the per-line weighted at-most-2 CSP `∀L: Σ_{c∈F_G} w_{L,c}·sel[c] ≤ 2` (`w_{L,c} = |{g·c : g∈G} ∩ L|`), which is exactly a finite quadratic CSP (det≠0 over orbit triples in `F_G`). Closes **Hypothesis H** (45/45 computational validation across all six groups, m=2..12). The `m=37` existence question is precisely this C4 instance.
-- **Part IV — Reverse (resolved negative).** FDR is *structure → property* (symmetry ⇒ Sidon). The converse *property → structure* fails: (P4.1) asymmetric `iden` configs *do* satisfy the Sidon signature (~2.8% of random m-subsets at m=16); (P4.2) Sidon carriers are super-exponentially dominated by asymmetric configs (≳ `0.46·0.78^m·C(m²,m)` vs ≪1 C₄-NTIL domain for m≥30); (P4.3) the quadratic signature lives on `F_G` and forgetting lift symmetry is irreversible. **SIRH is a strict one-way necessary hierarchy**, not an equivalence.
+- **Part III — exact encoding.** Keep the weighted line and determinant models as
+  solver formulations without promoting them to existence results.
+- **Part IV — reverse direction.** Simple counterexamples already show that a
+  Sidon-like filter does not force symmetry; stronger asymptotic counting claims
+  remain separate and require their own proof.
 
 Verification (Math skill rigor check, 2026-07-14): the a−b = −2(x−y) identity, the T15.2 (3-cycle) determinant identity `det = −½[(x−y)²+(y−z)²+(z−x)²]` (zero iff degenerate), the C6 parallelogram displacement argument, and the R8-G per-line⇔NTIL equivalence were each confirmed by symbolic derivation and numerical spot-checks (`analysis/results/verify_readme_theorems.py`, `analysis/results/verify_readme_theorems.json`).
 
-One-way necessary chain — symmetry *generates* layered rigidity, rigidity does not force symmetry. See `analysis/results/rigidity_hierarchy_theorem.md`, `analysis/results/part4_reverse.md`.
+Historical synthesis documents:
+`analysis/results/rigidity_hierarchy_theorem.md` and
+`analysis/results/part4_reverse.md`. Their theorem labels are superseded by
+the status in this README until the proof audit is resolved.
 
 ---
 
@@ -1243,9 +1376,17 @@ The following open problems arise directly from our analysis:
 
 **3. Infinite existence of missing-center solutions.** Do missing-center solutions exist for arbitrarily large $n$? rot2 data shows they persist at least through $n=29$ (773 MC out of 17,332 rot2 solutions at $n=27$). The iden class is known to have MC at $n=21$ (17 out of 142 partial iden solutions). A definitive answer would require either an explicit infinite construction or an exhaustive iden-class search for $n\ge 21$.
 
-**4. The iden solution count growth rate.** The Flammenkamp cache shows iden (fully asymmetric) solutions growing exponentially for n=5..20 (n=20: 117,347 solutions, 99.4% of all solutions). This contradicts any "symmetry emergence" narrative. The true asymptotic growth rate $I(n)$ of iden-class solutions is a fundamental open problem — is it $\Theta(e^{cn})$, $\Theta(e^{c n \log n})$, or something else? Container methods provide an upper bound of $\le \exp(O(n))$ containers; the lower bound from full enumeration (n=5..20) fits $\approx e^{0.68n}$.
+**4. The iden solution count growth rate.** The Flammenkamp cache shows iden
+(fully asymmetric) solutions growing rapidly for n=5..20 (n=20: 117,347 solutions,
+99.4% of all solutions). This contradicts any inference of “symmetry emergence”
+from the later, symmetry-biased sample. The asymptotic growth rate remains open.
+The provisional container discussion in §2.8 supplies no established asymptotic
+bound for this count.
 
-**5. Resolution of the Quadratic Gap.** The FDR theorem (§2.10) proves that symmetric configurations satisfy Sidon, while the Quadratic Gap (§2.12) proves Sidon alone is insufficient for C₄ lift. The open question is: what *extra algebraic structure* (e.g., a specific quadratic form vanishing on each orbit triple, or a number-theoretic obstruction at certain $m$) characterizes the "gap" between Sidon pairings and C₄-liftable pairings? Resolving this would not only determine whether $m=37$ (n=74) has a solution, but reveal the true algebraic nature of the no-three-in-line problem on symmetric grids.
+**5. Repair and quantify the linear-to-quadratic gap.** First prove the desired
+group-specific linear filters with correct orbit quantifiers; then specify which
+uniform linear-form families cannot encode all determinant conflicts. This is
+logically prior to promoting FDR or SIRH.
 
 **6. The m=37 C₄ instance (n=74).** The central open existence question. R8-G reduces it to satisfiability of a specific ~1.26M-constraint quadratic CSP over ~1,369 binary variables. Six computational directions were systematically evaluated (2026-07-13), plus a seventh from 2026-07-16:
 - **① LLL/Switching**: vanilla symmetric LLL `ep(d+1)>1` fails from m≥14, and at m=37 fails in *both* natural spaces — the bijection space gives `e·p·(d+1) ≈ 7.8×10²` and the stub‑matching space `≈ 8.9×10³` (probability factors `p₂=1/(73·71)=1.93×10⁻⁴`, `p₃=1/(73·71·69)=2.80×10⁻⁶` verified), both ≫ 1; Moser–Tardos random resample gives only 2.7% solve rate on m=10. (Lemma 1b's m ≥ 8 counting proof (`analysis/results/lemma1b_proof.md`) remains sound, but does not bridge the gap.)
@@ -1255,11 +1396,20 @@ The following open problems arise directly from our analysis:
 - **④ Energy bound**: all counting/pigeonhole-type arguments fail (direction key space and C4-orbit space are both in surplus).
 - **⑤ Data-driven**: no breakthrough invariant found.
 - **⑥ Algebraic geometry / Gröbner**: sympy cannot handle even the m=5 single-triple product polynomial (symbolic explosion).
-- **⑦ SDP certification (2026-07-16, `analysis/results/route3_sdp_report.md`)**: The direction-signing subproblem (2-factor fixed → signed-NAE) is mapped to MAX-CUT SDP. **20 random m=37 2-factors** all yield SDP lower bound ≥ **45.5** (each individually unredeemable). A specific 408-edge 2-factor is certified to need ≥ **16** violations (exact integer bound via triangle-in-SDP). However, **no universal inequality was found** (R² = 0.595 for lower bound vs edge count), so the SDP certifies individual 2-factors but does not prove m=37 impossibility.
+- **⑦ SDP route (withdrawn pending re-audit)**: the earlier report mixed clause,
+  relaxation, and geometric-triple counts and mislabelled 408/448-clause instances
+  as 2-factors with that many edges. Its numerical bounds are not evidence until the
+  objective and dual-certificate direction are reconstructed and independently checked.
 
-**Conclusion**: m=37 remains open under current tools and theory. The SIRH framework (theorems FDR → R7 → R8-G → Part IV) and the full computational evidence (gating data across 30 m-values, cycle analysis across m=3..36, SDP certification of 20 specific 2-factors) constitute the project's primary contributions — establishing the **symmetry-induced rigidity hierarchy** as a general phenomenon in extremal grid combinatorics.
+**Conclusion**: m=37 remains open. The trustworthy output is a collection of exact
+encodings, verified known solutions, bounded local certificates, and well-documented
+failed routes. A general symmetry-induced rigidity theorem has not been established.
 
-**Most promising underexplored direction**: a **full 2-factor edge-swap search** (`csearch2` prototype, `analysis/results/conflict_hypergraph.md`). Three swap types (YSWAP/XSWAP/XYSWAP) on the complete 2-regular graph space — gating data shows `red_config_frac=1.0` for all m≥14, meaning every bad configuration has a strictly-badness-reducing 2-switch in the full edge space. At m=10 this achieves best=4 (vs csearch1's best=32, 8× improvement). The conflict hypergraph is very sparse: 97% of conflicts are (X)-type (ternary), and each cell per 2-factor participates in only 0.6–0.9 (X) conflicts, decreasing with m — supporting LLL/nibble-type arguments. This approach was **never correctly implemented** in the original six evaluated directions — all earlier edge-swap implementations were coordinate-swapping (constellation space), not graph-edge-swapping.
+**Search direction retained with limited scope**: a full 2-factor edge-swap search
+(`csearch2` prototype, `analysis/results/conflict_hypergraph.md`).
+The recorded samples had `red_config_frac=1.0` for m≥14, but sampling does
+not show that *every* bad configuration has a reducing switch. This is a heuristic
+search direction, not a descent theorem.
 
 ---
 
@@ -1272,7 +1422,9 @@ The following open problems arise directly from our analysis:
 - **Within the full-enumeration range (n=5–20), iden solutions grow exponentially**: n=20 has 117,347 iden solutions, constituting **99.4% of all known solutions at that n**. There is zero evidence of "symmetry emergence" or "iden extinction."
 - The apparent dominance of symmetric classes (rot4, rct4) at n≥33 is a **survivorship bias**: symmetric classes are sampled because their reduced search space (factor 8–16) made enumeration feasible. The "Symmetry Emergence" conjecture — that asymmetric solutions vanish at large n — **has no empirical basis** and is contradicted by the available full-enumeration data.
 
-**Moral**: Any claim about the asymptotic prevalence of symmetric over asymmetric solutions must be treated as unsupported until direct enumeration or a non-constructive counting argument for large n becomes available. The container method (§2.8) offers the most promising theoretical approach to this question.
+**Moral**: Any claim about the asymptotic prevalence of symmetric over asymmetric
+solutions is unsupported until direct enumeration or a valid counting argument for
+large n becomes available. The container idea in §2.8 is only one unproved option.
 
 **Exhaustive search (`no3line.cpp`).** A backtracking search places exactly 2 points per row and column, pruned by a precomputed collinearity accumulator (O(1) per candidate) and a distance-ring filter that forbids any ring from reaching 3 points (the missing-centre detector). Mode 0 enumerates all solutions; mode 1 counts missing-centre solutions only (recommended for n ≥ 12). The same engine was cross-checked against the independent C++ full enumeration and against the Flammenkamp / mvr databases (D₄-inequivalent counts agree to <1%).
 
@@ -1280,8 +1432,11 @@ The following open problems arise directly from our analysis:
 
 **Unconstrained search (`d4_relaxed.cpp`).** A cell-by-cell backtrack with no 2-per-row rule, used to confirm that the even-n threshold is geometric, not a search artefact (§3.12).
 
-**Independent Math-skill audit (2026-07-16, `analysis/results/AUDIT_nonREADME_2026-07-16.md`).** All 137 `.md` files in `analysis/` and `analysis/results/` not previously included in this README underwent a rigorous theorem/conjecture/open audit with hard-number verification. Key findings:
-- **~45 theorem-grade documents** confirmed sound (SIRH core, C₂ theorems, Costas classification, Burnside orbit counts, R9c/d/e theorem chain, mutual edge decomposition, etc.)
+**Historical audit (2026-07-16,
+`analysis/results/AUDIT_nonREADME_2026-07-16.md`).** This audit was useful
+for locating claims, but later checks found additional proof and solver defects,
+including in the SIRH/FDR chain. Its aggregate “theorem-grade” counts are therefore
+withdrawn; individual results must be checked against current dated corrections.
 - **2 severe overclaims**: `switch_graph_theorem.md` + `lemma1a_algebraic_proof.md` (Theorem 1 not proven for m=37 — see §3.16 #6), `alpha_breakthrough.md` ("Computational Proof" title)
 - **5 minor overclaims**: `container_analysis.md` §4.1, `hypergraph_theory.md` §2.1, `quadratic_complete_determination.md`, `part4_reverse.md` P4.2, `research_directions.md` §1 (withdrawn claims hidden in appendix)
 - **All findings incorporated into the open-problem statements above** — the audit corrected no substantive theorem errors in the README's §2 (proven results) but tightened the honesty calibration of several §3 claims.
@@ -1433,14 +1588,17 @@ Non-C4 solutions have bounded k = |L| ≤ 14 (observed max), while Motzkin paths
 | L23 | k/n → 1/π (now theorem, Th-17 corollary) | Motzkin proof |
 | L25 | rot4 signature → solution unique (n≥12) | 100% verified |
 
-### 6.9 Complete Theorem Inventory (28 verified)
+### 6.9 Historical Result Inventory *(not a theorem count)*
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Strictly proven** | 15 | Th-2,7,9,10,11,13,14,16,17,20; R1-R5,R7 |
-| **Computationally verified** | 6 | Th-5,8,18; R2,R4,R6 |
+| **Previously labelled proven; re-audit required** | — | Th-2,7,9,10,11,13,14,16,17,20; R1-R5,R7 |
+| **Computationally checked on finite data** | 6 | Th-5,8,18; R2,R4,R6 |
 | **Empirical laws** | 34 | L1-L34 |
-| **Symmetry classes** | 3 complete | rot4/rct4/general |
+| **Symmetry frameworks** | 3 | rot4/rct4/general |
+
+The old title “28 verified theorems” mixed proofs, finite checks, and empirical
+laws and also had inconsistent arithmetic. No aggregate theorem count is claimed.
 
 ### 6.10 Data Sources
 
@@ -1454,12 +1612,22 @@ Non-C4 solutions have bounded k = |L| ≤ 14 (observed max), while Motzkin paths
 
 ## 7. m=37 Attack — External-Agent Theory, Gaussian-Resource Decomposition & Search Bottom (2026-07-19/20)
 
-> **Status & provenance.** This section consolidates (a) the *correct* structural
+> **Superseding status note (2026-07-21).** The old custom
+> `benders_subproblem.dpll_model` produced false UNSAT answers. Any large
+> random sweep, MUS statistic, density conclusion, or “likely no solution” claim
+> derived from that implementation is withdrawn. The six V20 negative instances
+> and known positive instances at m=5/10/14/36 were subsequently cross-checked with
+> Z3, Glucose4, the repaired DPLL, and the exact geometry oracle; see
+> [`validate_solver_report.md`](analysis/even_n_existence_tools/validate_solver_report.md).
+> The global status remains **OPEN**.
+>
+> **Status & provenance.** This section consolidates (a) structural
 > theory produced by parallel autonomous agents studying `even_n_existence`
 > (theoretical arm) and `ising_m37` (experimental search arm) — both read-only
 > external sources, not modified — and (b) the findings of our own 10-hour
 > autonomous study. Every claim is labelled by confidence level:
-> **[THEOREM]** = algebraically proven and independently re-verified in this repo;
+> **[THEOREM]** = claimed algebraic identity or lemma; readers should still inspect
+> the linked proof because historical status labels are not authoritative;
 > **[COMPUTATIONAL CERTIFICATE]** = machine-checked over an exhaustive finite
 > search, but not independently reproduced here;
 > **[OBSERVATION]** = empirical, from finite computation;
@@ -1471,8 +1639,9 @@ Non-C4 solutions have bounded k = |L| ≤ 14 (observed max), while Motzkin paths
 > as such and are NOT promoted to theorems.)*
 
 ### 7.1 Setup recap (m=37, n=74)
-rot4 NTIL ⇔ 2-regular pseudograph on the m=37 directed cells (u,v)∈{0..36}²,
-each lifted by C₄ to 4 grid points; no three of the 2n=74 points collinear.
+rot4 NTIL ⇔ a 2-regular pseudograph on 37 vertices whose 37 directed edge-cells
+`(u,v)∈{0..36}²` are each lifted by C₄ to four grid points; this produces
+`4m=148=2n` points, not 74.
 The four `V=40` basins are the strict 2-swap local minima (40 bad collinear
 triples) identified by the ising-style framework; all m≤36 have known rot4
 solutions, **m=37 is [OPEN]**.
@@ -1590,9 +1759,13 @@ m=37 remains **[OPEN]**. What is established:
   and the matching-shell rigidity certificates are detailed in §7.11.5–§7.11.7.
   ⚠️ This closure is about a *worse* family than the V=20 record and does **not**
   bound the V=20 neighbourhood.
+- The **V=20 six-basin rot4 multigraph** model is closed through replacement
+  radius **k=14**: 19 capacity-feasible masks give 23 completed 2-factors, and all
+  23 fail the exact no-three-collinear oracle. See §7.11.9. The neighbourhood is
+  still **OPEN** for k≥15.
 - Every direct search to date diverges at 160–300 collinear triples (§7.9).
 
-What is **not** established: whether a distance-≥13 escape (or a solution in a
+What is **not** established: whether a replacement-radius-≥15 escape (or a solution in a
 completely different basin) exists. The question *"does every even n admit 2n points
 with no three collinear?"* is **unresolved** for n=74 and in general.
 
@@ -1720,6 +1893,26 @@ are local minima with no known zero nearby, and the only unclosed V=40 window is
 neighbourhood (or a basin far from both) hides a 0/36 configuration. **m=37 remains
 [OPEN]**.
 
+#### 7.11.9 V=20 six-basin rot4 multigraph — corrected k=14 audit [COMPUTATIONAL CERTIFICATE]
+
+A GPU/C++ pipeline enumerated replacement masks, applied q=0→q=3 necessary
+line-capacity filters, enumerated **all** completing 2-factors, and finally checked
+every orientation with the exact 148-point geometry oracle.
+
+- k≤13 had already been closed by the earlier pipeline.
+- At k=14, 74,259,409 root-option masks were scanned across six basins.
+- The capacity funnel retained 19 masks.
+- Four masks have two completions; therefore the complete audit contains **23**
+  2-factors, not 19.
+- The all-completions enumeration was not truncated, and all **23/23** factors are
+  UNSAT under exhaustive 2¹⁴ orientation checks plus the exact geometry oracle.
+
+Thus no solution exists within replacement radius k≤14 of these six V=20 basins.
+This is a bounded local certificate, not a global m=37 result. Radius k≥15 and all
+other basins remain **OPEN**. Full corrected report:
+[`analysis/results/k14_corrected_certification.md`](analysis/results/k14_corrected_certification.md).
+<!-- End of the m=37 research-status section -->
+
 ## Usage
 ### Build
 
@@ -1756,6 +1949,10 @@ The batch file auto-detects MSVC if MinGW is not found.
 **Windows**: Edit `run.bat` or run `run.bat`
 
 ## Repository Structure
+The tree below documents the original executable and analysis entry points. It is
+illustrative rather than exhaustive; current m=37 work additionally lives under
+`analysis/results/` and `analysis/even_n_existence_tools/`.
+
 ```
 ├── no3line.cpp                  # C++ source: backtracking search for missing-center solutions
 │                                #   mode 0 = full enumeration
@@ -1830,10 +2027,11 @@ This produces a report with three independent checks:
 
 The repository also includes **RLE-format solution analysis** (`results/result_rle_n7-19.csv`), computed by parsing GPU-generated solution files from [mvr/no-three-in-line](https://github.com/mvr/no-three-in-line) using `analysis/analyze_rle.py`. This extends the missing-center analysis to n = 7–19 without requiring local exhaustive search for n ≥ 14.
 
-**2026-07-13 theorem documents added** (`analysis/results/`):
-- `rigidity_hierarchy_theorem.md` — SIRH umbrella (4-part hierarchy)
-- `r8_generalized.md` — R8-G (quadratic completeness for all 6 FDR groups)
-- `part4_reverse.md` — Part IV (reverse direction, resolved negative)
+**2026-07-13 historical theory documents** (`analysis/results/`; status
+labels inside these files are superseded by this README's audit notes):
+- `rigidity_hierarchy_theorem.md` — provisional SIRH synthesis
+- `r8_generalized.md` — generic weighted line encoding
+- `part4_reverse.md` — reverse-direction exploration
 - `theorem_r9f_baseframe_3free.md` — T15 cycle type refinement
 - `final_direction_ruling_2026-07-13.md` — 6-direction evaluation
 - `direction4_formal_complete.md` — Energy bound analysis
@@ -1876,7 +2074,7 @@ The repository also includes **RLE-format solution analysis** (`results/result_r
 
 17. **B. Kovács, Z. L. Nagy, and D. R. Szabó** (2025). "Settling the no-(k+1)-in-line problem when k is not small." arXiv:2502.00176. — Proves the no-(k+1)-in-line answer is kn for k > C√(n log n) (major result on the generalization).
 
-18. **T. Prellberg, P. Ramanathan, M. Lewis, et al.** (2025). "Three Methods, One Problem: Classical and AI Approaches to No-Three-in-Line." arXiv:2512.11469. — First systematic ILP vs PatternBoost/PPO comparison; ILP optimal to 19×19.
+18. **P. Ramanathan, T. Prellberg, M. Lewis, P. D. Joshi, R. A. Dandekar, R. Dandekar, and S. Panat** (2025). "Three Methods, One Problem: Classical and AI Approaches to No-Three-in-Line." arXiv:2512.11469. — Comparison of ILP, PatternBoost, and PPO; ILP reports optimal solutions through 19×19.
 
 19. **T. Prellberg** (2026). CP-SAT symmetry-reduction enumeration of NTIL configurations. arXiv:2602.07751. — Methodological basis for large-n (incl. C₄) computational searches; directly relevant to our CP-SAT pipeline.
 
@@ -1895,13 +2093,15 @@ The author gratefully acknowledges:
 If you use this work in research, please cite this repository:
 
 ```
-@software{no3line_missing_center,
+@software{du2026_no3inline_rigidity,
   author = {Du, Junrong},
-  title = {no3line-missing-center: No-Three-In-Line Missing Center Analysis},
+  title = {No-Three-In-Line: Symmetry Reductions, Exact Encodings,
+           and the Open n=74 Case},
   year = {2026},
-  url = {https://github.com/aujurd22/no3inline-missing-center} (version v1.0)
+  url = {https://github.com/aujurd22/no3inline-rigidity},
+  note = {AI-assisted computational research notebook}
 }
 ```
 
 ## License
-MIT
+MIT. See [`LICENSE`](LICENSE).
